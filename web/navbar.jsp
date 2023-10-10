@@ -44,7 +44,7 @@
                                         <ul>
                                             <li><a href="showOrder?sod=${sessionScope.user.id}">Đơn hàng</a></li>
                                             <!--<li><a href="#">Lịch sử</a></li>-->
-                                            <c:if test="${sessionScope.user.roles == 3}">    
+                                            <c:if test="${sessionScope.user.roles > 1}">    
                                                 <li><a href="profileCustomer?Accid=${sessionScope.user.id}">Cá Nhân</a></li>
                                                 </c:if>
                                         </ul>
