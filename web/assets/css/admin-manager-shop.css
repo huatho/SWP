@@ -1,0 +1,67 @@
+/*headder*/
+.dm-sp-adver a{
+    color: white;
+}
+.dm-sp-adver {
+    text-align: left;
+}
+.dm-sp-adver a:hover{
+    color: black;
+    background-color: rgb(255, 255, 255);
+}
+/*headder*/
+/*-----------------------*/
+/*body*/
+body {
+    background-color: rgba(223, 241, 243, 0.821);
+}
+.ad-home-main {
+    width: 100%;
+    padding: 2% 1%;
+    margin: 1% 0%;
+}
+/*Search item*/
+.search-product-adver {
+    margin: 2% 5%;
+    padding-left: 5%;
+    border-radius: 5px;
+    border: 1px solid rgb(186, 186, 186);
+    background-color: rgba(194, 194, 194, 0.244);
+} 
+
+/*Search item*/
+/*table-infor-product-ad ( bảng thông tin quảng cáo)*/
+.table-infor-product-ad , .all-link-connet,.money-make-all{
+    background-color: rgba(255, 255, 255, 0.69);
+    padding: 2% 3%;
+    margin: 0% 2%;
+    border-radius: 5px;
+    border: 1px solid rgba(78, 78, 78, 0.301);
+    box-shadow: 0 2px 15px rgba(105, 105, 105, 0.251);
+}
+.search-product-adver {
+    background-color: rgba(255, 255, 255, 0.69);
+    padding: 1% 1%;
+    margin-left: 2%;
+    box-shadow: 0 2px 15px rgba(105, 105, 105, 0.251);
+}
+.all-link-connet,.money-make-all {
+    padding: 10% 5%;
+    margin-bottom: 3%;
+}
+.icon-link i{
+    margin-left: 10%;
+    font-size: large;
+    color: rgb(137, 144, 252);
+}
+.icon-link {
+    text-align: center;
+    right: 2%;
+}
+.content-admin-qly {
+    margin-left: 10%; 
+    font-size: larger; 
+    font-weight: bold;
+}
+/*table-infor-product-ad ( bảng thông tin quảng cáo)*/
+/*body*/

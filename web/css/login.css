@@ -1,0 +1,37 @@
+body{
+    background-color: lightcyan;
+}
+.input-box{
+    margin-bottom: 10px;
+    width: 100%;
+    border-bottom: 2px solid #007fff;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+.input-box input{
+    width: 95%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1.2em;
+}
+#show, #hide{
+    font-size: 1.2em;
+}
+label{
+    font-size: 1.4em;
+}
+.password, .username{
+        width: 90%;
+        border: none;
+        outline: none;
+        
+    }
+    
+.eye{
+    position: absolute;
+}
+
+#hide{
+    display: none;
+}
