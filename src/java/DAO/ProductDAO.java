@@ -46,7 +46,8 @@ public class ProductDAO {
         String query = "SELECT TOP 6 p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName\n" +
 "FROM Store_Detail as sd INNER JOIN Products as p ON sd.productID = p.productID\n" +
 "INNER JOIN Stores as s ON sd.storeID = s.storeID\n" +
-"INNER JOIN Category as c ON p.categoryID = c.categoryID ORDER BY productID DESC";
+"INNER JOIN Category as c ON p.categoryID = c.categoryID "
+                + "WHERE p.accept = 1 ORDER BY productID DESC";
               
         try {
             conn = new DBContext().getConnection();
@@ -92,7 +93,8 @@ public class ProductDAO {
         String query = "SELECT p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName, sd.amount\n" +
 "FROM Store_Detail as sd INNER JOIN Products as p ON sd.productID = p.productID\n" +
 "INNER JOIN Stores as s ON sd.storeID = s.storeID\n" +
-"INNER JOIN Category as c ON p.categoryID = c.categoryID\n" +
+"INNER JOIN Category as c ON p.categoryID = c.categoryID\n"
+                + "WHERE p.accept = 1" +
 "ORDER BY productID\n" +
 "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
         try {
@@ -214,13 +216,12 @@ public class ProductDAO {
 
 
     public int getTotalProductBySearch(String txtSearch) {
-        String query = "SELECT COUNT(*) FROM Products left join Store on Product.StoreID = Store.StoreID\n"
-                + "where Product.ProductName like ? or Store.StoreName like ? ";
+        String query = "SELECT COUNT(*) FROM Products\n"
+                + "where productName like ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, "%" + txtSearch + "%");
-            ps.setString(2, "%" + txtSearch + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 return rs.getInt(1);
@@ -230,34 +231,35 @@ public class ProductDAO {
         return 0;
     }
 
-    public List<Product> pagingProductBySearch(String txtSearch, int index) {
-        List<Product> listProductInPage = new ArrayList<>();
-        String query = "select p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, sum(pd.CountProduct) as totalProduct\n"
-                + "from Products as p\n"
-                + "left outer join Product_Detail as pd on (p.productID = pd.productID)\n"
-                + "left outer join Category as c on (p.categoryID = c.categoryID)\n"
-                + "where p.productName like ? or s.StoreName like ?\n"
-                + "group by p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName\n"
-                + "ORDER BY productID\n"
-                + "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
+    public List<CardProduct> pagingProductBySearch(String txtSearch, int index) {
+        List<CardProduct> listProductInPage = new ArrayList<>();
+        String query = "SELECT p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName, sd.amount\n" +
+"FROM Store_Detail as sd INNER JOIN Products as p ON sd.productID = p.productID\n" +
+"INNER JOIN Stores as s ON sd.storeID = s.storeID\n" +
+"INNER JOIN Category as c ON p.categoryID = c.categoryID\n" +
+"WHERE p.productName like ? AND p.accept = 1\n" +
+"ORDER BY productID\n" +
+"OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, "%" + txtSearch + "%");
-            ps.setString(2, "%" + txtSearch + "%");
-            ps.setInt(3, (index - 1) * 8);
+            ps.setInt(2, (index - 1) * 8);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Product p = new Product(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getInt(6),
-                        rs.getInt(7),
-                        rs.getString(8),
-                        rs.getInt(9)
-                       );
+                CardProduct p = new CardProduct(
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4),
+                            rs.getString(5),
+                            rs.getInt(6),
+                            rs.getInt(7),
+                            rs.getString(8),
+                            rs.getInt(9),
+                            rs.getString(10),
+                            rs.getInt(11)
+                    );
                 listProductInPage.add(p);
             }
         } catch (Exception e) {
@@ -386,7 +388,7 @@ public class ProductDAO {
         boolean result = false;
         try {
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement("INSERT INTO Products VALUES(?, ?, ?, ?, ?, ?)");
+            ps = conn.prepareStatement("INSERT INTO Products VALUES(?, ?, ?, ?, ?, ?, 0)");
             ps.setString(1, product.getProductName());
             ps.setString(2, product.getDescriptions());
             ps.setString(3, product.getSex());
@@ -412,7 +414,7 @@ public class ProductDAO {
 "FROM Store_Detail as sd INNER JOIN Products as p ON sd.productID = p.productID\n" +
 "INNER JOIN Stores as s ON sd.storeID = s.storeID\n" +
 "INNER JOIN Category as c ON p.categoryID = c.categoryID\n" +
-"WHERE p.categoryID = ?\n" +
+"WHERE p.categoryID = ? AND p.accept = 1\n" +
 "ORDER BY productID\n" +
 "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
             try {

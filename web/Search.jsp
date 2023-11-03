@@ -92,8 +92,10 @@
                         <div class="categories__slider owl-carousel">
                         <c:forEach items="${listTop}" var="o">
                             <div class="col-lg-3">
-                                <div class="categories__item set-bg" data-setbg="${o.imageLink}">
-                                    <h5><a href="detail?productID=${o.productID}">${o.productName}</a></h5>
+                                
+                                <div class="categories__item set-bg"">
+                                    <img src="${o.imageLink}"/>
+                                    <h5><a href="detail?productID=${o.productID}&storeID=${o.storeID}">${o.productName}</a></h5>
                                 </div>
                             </div>
                         </c:forEach>
@@ -122,7 +124,8 @@
                     <c:forEach items="${listProductInPage}" var="o">
                         <div class="col-lg-3 col-md-4 col-sm-6 mix coat man women">
                             <div class="featured__item">
-                                <div class="featured__item__pic set-bg" data-setbg="${o.imageLink}">
+                                <div class="featured__item__pic set-bg">
+                                    <img src="${o.imageLink}"/>
                                     <ul class="featured__item__pic__hover">
                                         <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                         <li><a href="#"><i class="fa fa-retweet"></i></a></li>
@@ -130,7 +133,7 @@
                                     </ul>
                                 </div>
                                 <div class="featured__item__text">
-                                    <h6><a href="detail?productID=${o.productID}">${o.productName}</a></h6>
+                                    <h6><a href="detail?productID=${o.productID}&storeID=${o.storeID}">${o.productName}</a></h6>
                                     <h5>${o.priceWithDot}</h5>
                                 </div>
                             </div>

@@ -1,4 +1,4 @@
-package controlBao;
+package control1;
 
 import daos.ChatDAO;
 import dtos.ChatDTO;

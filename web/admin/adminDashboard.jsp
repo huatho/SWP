@@ -204,19 +204,19 @@
                                                 <i class="fa fa-money" style="color: #ef8157" aria-hidden="true"></i>
                                             </div>
                                         </div>
-                                        <div class="col-7 col-md-8">
+<!--                                        <div class="col-7 col-md-8">
                                             <div class="numbers">
                                                 <p class="card-category">Doanh thu</p>
-                                                <%
+                                                <
                                                     long total = ad.totalPrice();
                                                     Locale localeVN = new Locale("vi", "VN");
                                                     NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
                                                     String str1 = currencyVN.format(total);
                                                 %>
-                                                <p class="card-title"><%= str1%>
+                                                <p class="card-title"><= str1%>
                                                 </p>
                                             </div>
-                                        </div>
+                                        </div>-->
                                     </div>
                                 </div>
                                 <div class="card-footer ">

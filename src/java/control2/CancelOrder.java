@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlHau;
+package control2;
 
 import DAO.DetailDAO;
 import DAO.ProductDAO;
@@ -37,9 +37,9 @@ public class CancelOrder extends HttpServlet {
         String oid = request.getParameter("id");
         if(oid != null) {
             DetailDAO  cano = new DetailDAO();
-            ProductDAO dao = new ProductDAO();
-            cano.cancelOrder("2", oid);
-            dao.updateProductAfOrder(oid);
+//            ProductDAO dao = new ProductDAO();
+            cano.cancelOrder(Integer.parseInt(oid));
+//            dao.updateProductAfOrder(oid);
         }
         response.sendRedirect("home");
     }

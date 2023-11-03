@@ -76,8 +76,89 @@
         <jsp:include page="category.jsp"></jsp:include>
             <!-- Breadcrumb Section End -->
 
-            <!-- Shoping Cart Section Begin -->
+        <c:if test="${listConfirm.size()>0}">
             <section class="shoping-cart spad">
+                    <h1 style="text-align: center; font-weight: 800; color: green;">XÁC NHẬN GIAO HÀNG</h1>
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="shoping__cart__table">
+
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="shoping__product">Mã đơn hàng</th>
+                                                <th>Mã Shop</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Số lượng</th>
+                                                <th>SĐT</th>
+                                                <th>Địa chỉ</th>
+                                                <th>Tổng tiền</th>
+                                                <th></th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${listConfirm}" var="s">
+                                            <tr>
+
+                                                <td class="shoping__cart__item">
+                                                    ${s.orderID}
+                                                </td>
+                                                <td>
+                                                    ${s.storeID}
+                                                </td>
+                                                <td>
+                                                   <span style="font-weight: bold;">
+                                                            ${s.listProductName}</span>
+                                                            <br>
+                                                <img src="${s.image}" class="img-fluid img-thumbnail" width="200" height="200"/>
+                                                </td>
+                                                <td class="shoping__cart__Creat">
+                                                    ${s.amount}
+                                                </td>
+                                                <td>
+                                                    ${s.phone}
+                                                </td>
+
+                                                <td class="shoping__cart__address">
+                                                    ${s.address}   
+                                                </td>
+
+                                                <td>
+                                                    <strong>${s.total}</strong>đ
+                                                </td>
+                            
+                                                <td class="shoping__cart__status">
+                                                    <form method="POST" action="showOrder">
+                                                        <input hidden value="${s.orderDetailID}" name="odid"/>
+                                                        <button class="btn btn-sm btn-success" type="submit">Xác nhận</button>
+                                                    </form>
+                                                </td>
+                                                
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+            <hr style="border: 2px solid">
+            <hr style="border: 2px solid">
+        </c:if>
+            
+            <!-- Shoping Cart Section Begin -->
+            
+            
+ 
+            <section class="shoping-cart spad">
+                <h1 style="text-align: center; font-weight: 800; color: green;">ĐƠN HÀNG CỦA BẠN</h1>
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -87,12 +168,12 @@
                                     <thead>
                                         <tr>
                                             <th class="shoping__product">Mã đơn hàng</th>
+                                            <th>Mã Shop</th>
                                             <th>Tên sản phẩm</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Ngày giao</th>
+                                            <th>Số lượng</th>
+                                            <th>SĐT</th>
                                             <th>Địa chỉ</th>
                                             <th>Tổng tiền</th>
-                                            <th>Phương thức</th>
                                             <th>Trạng thái</th>
 
                                         </tr>
@@ -105,49 +186,36 @@
                                                 ${s.orderID}
                                             </td>
                                             <td>
-                                                <c:forEach items="${s.listProductName}" var="n">
-                                                    <p>${n}</p>
-                                                </c:forEach>
+                                                ${s.storeID}
+                                            </td>
+                                            <td>
+                                               <span style="font-weight: bold;">
+                                                            ${s.listProductName}</span>
+                                                            <br>
+                                                <img src="${s.image}" class="img-fluid img-thumbnail" width="200" height="200"/>
                                             </td>
                                             <td class="shoping__cart__Creat">
-                                                ${s.foundedDate}
+                                                ${s.amount}
                                             </td>
-                                            <c:if test="${s.status != 2}">
-                                                <c:if test="${s.deliveryDate == null}">
-                                                    <td class="shoping__cart__end">
-                                                        3-4 days
-                                                    </td>
-                                                </c:if>
-                                            </c:if>
-                                            <c:if test="${s.status != 2}">
-                                                <c:if test="${s.deliveryDate != null}">
-                                                    <td class="shoping__cart__end">
-                                                        ${s.deliveryDate}
-                                                    </td>
-                                                </c:if>
-                                            </c:if>
-                                            <c:if test="${s.status == 2}">
-                                                <td class="shoping__cart__end">
-                                                    Đã hủy
-                                                </td>
-                                            </c:if>
+                                            <td>
+                                                ${s.phone}
+                                            </td>
+                                            
                                             <td class="shoping__cart__address">
-                                                ${s.adress}   
+                                                ${s.address}   
                                             </td>
 
-                                            <td class="shoping__cart__price">
-                                                ${s.total}
+                                            <td>
+                                                <strong>${s.total}</strong>đ
                                             </td>
 
-                                            <td class="shoping__cart__payway">
-                                                ${s.paymentWay}
-                                            </td>
+                                         
                                             <c:if test="${s.status == 1}">
                                                 <td class="shoping__cart__status">
                                                     Đợi phê duyệt
                                                 </td>
                                                 <td class="shoping__cart__status">
-                                                    <a href="cancelOrder?id=${s.orderID}">
+                                                    <a href="cancelOrder?id=${s.orderDetailID}">
                                                         <span class="btn btn-sm btn-danger">
                                                             Cancel
                                                         </span>
@@ -155,13 +223,18 @@
                                                 </td>
                                             </c:if>
                                             <c:if test="${s.status == 2}">
-                                                <td class="shoping__cart__status">
-                                                    Đã hủy
+                                                <td class="shoping__cart__status" style="color: yellow  ; font-weight: 700;">
+                                                    Đang giao hàng
                                                 </td>
                                             </c:if>
                                             <c:if test="${s.status == 3}">
-                                                <td class="shoping__cart__status">
-                                                    Đang giao hàng
+                                                <td class="shoping__cart__status" style="color: green  ; font-weight: 700;">
+                                                    Đã nhận hàng
+                                                </td>
+                                            </c:if>
+                                            <c:if test="${s.status == 0}">
+                                                <td class="shoping__cart__status" style="color: red; font-weight: 700;">
+                                                    Đã hủy
                                                 </td>
                                             </c:if>
                                         </tr>

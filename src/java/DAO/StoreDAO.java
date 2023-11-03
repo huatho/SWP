@@ -92,9 +92,9 @@ public class StoreDAO {
     }
     
     public List<Product> getAllProduct(int storeID){
-        String query = "SELECT p.*, Store_Detail.amount FROM Store_Detail \n" +
+        String query = "SELECT p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, Store_Detail.amount FROM Store_Detail \n" +
 "  INNER JOIN Products as p ON Store_Detail.productID = p.productID \n" +
-"  WHERE storeID = ?";
+"  WHERE storeID = ? AND accept = 1";
         List<Product> l = new ArrayList<>();
         try {
             conn = new DBContext().getConnection();
@@ -155,5 +155,23 @@ public class StoreDAO {
         } catch (Exception e) {
         }
         return s;
+    }
+    
+    public int getAmount(int storeID, int productID){
+        String query = "SELECT amount FROM Store_Detail WHERE storeID = ? AND productID = ?";
+        int a = 0;
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+           
+            ps.setInt(1, storeID);
+            ps.setInt(2, productID);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                a = rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return a;
     }
 }

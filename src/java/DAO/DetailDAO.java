@@ -12,6 +12,7 @@ import entity.Color;
 import entity.Colors;
 import entity.Customers;
 import entity.Order;
+import entity.OrderCustomer;
 import entity.Size;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -176,7 +177,7 @@ public Cart showCart1(String cus, int stt, String size, String color, int cid) {
     }
  public List<Carts> showCart(int cus, int stt) {
         List<Carts> list = new ArrayList<>();
-        String query = "  select c.cartID, c.userID, cd.productID, cd.size, cd.color, cd.amount, c.status, p.productName, p.imageLink, p.price, p.price * cd.amount as total, cd.cartDetaiID\n" +
+        String query = "  select c.cartID, c.userID, cd.productID, cd.size, cd.color, cd.amount, c.status, p.productName, p.imageLink, p.price, p.price * cd.amount as total, cd.cartDetaiID, cd.storeID\n" +
 "  from Cart_Detail as cd INNER JOIN Carts as c ON (cd.cartID = c.cartID) \n" +
 "  INNER JOIN Products as p ON (cd.productID = p.productID)\n" +
 "  WHERE userID = ?";
@@ -198,7 +199,8 @@ public Cart showCart1(String cus, int stt, String size, String color, int cid) {
                         rs.getString(9),
                         rs.getDouble(10),
                         rs.getDouble(11),
-                        rs.getInt(12)
+                        rs.getInt(12),
+                        rs.getInt(13)
                 ));
             }
         } catch (Exception e) {
@@ -218,14 +220,15 @@ public Cart showCart1(String cus, int stt, String size, String color, int cid) {
 
         }
     }
-    public void checkout(int orderID, int productID, int amount) {
-        String query = "INSERT INTO Orders_Detail VALUES(?, ?, NULL, ?)";
+    public void checkout(int orderID, int productID, int amount, int storeID) {
+        String query = "INSERT INTO Orders_Detail VALUES(?, ?, '1', ?, ?)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setInt(1, orderID);
             ps.setInt(2, productID);
             ps.setInt(3, amount);
+            ps.setInt(4, storeID);
             ps.executeUpdate();
         } catch (Exception e) {
 
@@ -373,8 +376,8 @@ public Cart showCart1(String cus, int stt, String size, String color, int cid) {
 
         }
     }
- public void insertOrder(int userID, String address, String payWay, String phone, String receiver, int total, int storeID) {
-        String query = "Insert into Orders values (?, GETDATE(), NULL, ?, ?, NULL, ?, ?, ?, ?, ?)";
+ public void insertOrder(int userID, String address, String payWay, String phone, String receiver, int total) {
+        String query = "Insert into Orders values (?, GETDATE(), NULL, ?, ?, NULL, ?, ?, ?, ?)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -385,50 +388,80 @@ public Cart showCart1(String cus, int stt, String size, String color, int cid) {
             ps.setString(5, receiver);
             ps.setInt(6, total);
             ps.setString(7, "1");
-            ps.setInt(8, storeID);
             ps.executeUpdate();
         } catch (Exception e) {
         }
     }
  
- public List<Order> ShowOrder(int cusID) {
-        List<Order> list = new ArrayList<>();
-        String query = "SELECT o.orderID, o.foundedDate, o.deliveryDate, o.address, o.paymentWay, o.status, o.total\n" +
-"FROM Orders as o \n" +
-"WHERE userID = ?";
-        ProductDAO dao = new ProductDAO();
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, cusID);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                int orderID = rs.getInt(1);
-                list.add(new Order(
-                        orderID,
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getInt(7),
-                        dao.getListNameProduct(orderID)
-                ));
-            }
-        } catch (Exception e) {
+    public List<OrderCustomer> ShowOrder(int userID) {
+           List<OrderCustomer> list = new ArrayList<>();
+           String query = "SELECT o.orderID, storeID, productName, quantity, phone, address, quantity*price, od.orderStatus, od.orderDetailID, p.imageLink\n" +
+"FROM Orders as o INNER JOIN Orders_Detail as od ON o.orderID = od.orderID\n" +
+"INNER JOIN Products as p ON od.productID = p.productID\n" +
+"WHERE userID = ? ORDER BY o.orderID DESC";
+           try {
+               conn = new DBContext().getConnection();
+               ps = conn.prepareStatement(query);
+               ps.setInt(1, userID);
+               rs = ps.executeQuery();
+               while (rs.next()) {
+                   OrderCustomer o = new OrderCustomer(rs.getInt(1), 
+                   rs.getInt(2),
+                   rs.getString(3),
+                   rs.getInt(4),
+                   rs.getString(5),
+                   rs.getString(6),
+                   rs.getInt(7),
+                   rs.getString(8),
+                   rs.getInt(9),
+                   rs.getString(10));
+                   list.add(o);
+               }
+           } catch (Exception e) {
 
-        }
-        return list;
+           }
+           return list;
 
     }
-    public void cancelOrder(String status, String oid) {
-        String query = "update Orders set PaymentStatus = ? where OrderID = ?";
+    
+    public List<OrderCustomer> getListConfirm(int userID) {
+           List<OrderCustomer> list = new ArrayList<>();
+           String query = "SELECT o.orderID, storeID, productName, quantity, phone, address, quantity*price, od.orderStatus, od.orderDetailID, p.imageLink\n" +
+"FROM Orders as o INNER JOIN Orders_Detail as od ON o.orderID = od.orderID\n" +
+"INNER JOIN Products as p ON od.productID = p.productID\n" +
+"WHERE userID = ? AND orderStatus = '2'";
+           try {
+               conn = new DBContext().getConnection();
+               ps = conn.prepareStatement(query);
+               ps.setInt(1, userID);
+               rs = ps.executeQuery();
+               while (rs.next()) {
+                   OrderCustomer o = new OrderCustomer(rs.getInt(1), 
+                   rs.getInt(2),
+                   rs.getString(3),
+                   rs.getInt(4),
+                   rs.getString(5),
+                   rs.getString(6),
+                   rs.getInt(7),
+                   rs.getString(8),
+                   rs.getInt(9),
+                   rs.getString(10));
+                   list.add(o);
+               }
+           } catch (Exception e) {
+
+           }
+           return list;
+
+    }
+    
+    public void cancelOrder(int oid) {
+        String query = "DELETE Orders_Detail WHERE orderDetailID = ?";
         try {
 
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, status);
-            ps.setString(2, oid);
+            ps.setInt(2, oid);
             ps.executeUpdate();
         } catch (Exception e) {
         }

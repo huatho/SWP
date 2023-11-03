@@ -82,12 +82,12 @@
                                 <p>Quản lý sản phẩm</p>
                             </a>
                         </li>
-                        <li>
+<!--                        <li>
                             <a href="GetChatServlet">
                                 <i class="fa fa-comment" aria-hidden="true"></i>
-                                <p>Tin nhắn</p>
+                                <p>Doanh thu</p>
                             </a>
-                        </li>
+                        </li>-->
                     </ul>
                 </div>
             </div>

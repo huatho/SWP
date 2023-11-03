@@ -22,6 +22,7 @@ public class Carts {
     private double price;
     private double total;
     private int cartDetailID;
+    private int storeID;
 
     public Carts() {
     }
@@ -68,6 +69,26 @@ public class Carts {
         this.amount = amount;
         this.productName = productName;
         this.total = total;
+    }
+    
+    public Carts(int cartID, int userID, String productID, String size, String color, int amount, int stauts, String productName, String imgLink, double price, double total, int cartDetailID, int storeID) {
+        this.cartID = cartID;
+        this.userID = userID;
+        this.productID = productID;
+        this.size = size;
+        this.color = color;
+        this.amount = amount;
+        this.stauts = stauts;
+        this.productName = productName;
+        this.imgLink = imgLink;
+        this.price = price;
+        this.total = total;
+        this.cartDetailID = cartDetailID;
+        this.storeID = storeID;
+    }
+
+    public int getStoreID() {
+        return storeID;
     }
     
     

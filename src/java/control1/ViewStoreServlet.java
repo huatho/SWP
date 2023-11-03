@@ -1,4 +1,4 @@
-package controlBao;
+package control1;
 
 import daos.CategoryDAO;
 import DAO.StoreDAO;

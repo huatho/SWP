@@ -5,6 +5,7 @@
  */
 package DAO;
 
+import entity.OrderSeller;
 import entity.Orders;
 import java.sql.Connection;
 import java.sql.Date;
@@ -120,6 +121,50 @@ public class OrderDAO {
         }
         return null;
     }
+    
+    public List<OrderSeller> getOrderSeller(int storeID) {
+        String query = "  SELECT o.orderID, o.userID, p.productName, od.quantity, o.foundedDate, (od.quantity*p.price) as total, od.orderStatus, od.orderDetailID, p.imageLink\n" +
+"  FROM Orders_Detail as od INNER JOIN Orders as o ON od.orderID = o.orderID\n" +
+"  INNER JOIN Products as p ON od.productID = p.productID\n" +
+"  WHERE storeID = ? ORDER BY o.orderID DESC";
+        List<OrderSeller> l = new ArrayList<>();
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, storeID);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                OrderSeller ol = new OrderSeller(rs.getInt(1),
+                                    rs.getInt(2),
+                                    rs.getString(3),
+                                    rs.getInt(4),
+                                    rs.getString(5),
+                                    rs.getInt(6),
+                                    rs.getString(7),
+                                    rs.getInt(8),
+                                    rs.getString(9));
+                l.add(ol);
+            }
+        } catch (Exception e) {
+        }
+        return l;
+    }
+    
+    
+    
+    public void editOrderStatus(String status, int odID) {
+        String query = "update Orders_Detail \n"
+                + "set orderStatus = ? WHERE orderDetailID = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, status);
+            ps.setInt(2, odID);           
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
@@ -180,6 +225,40 @@ public class OrderDAO {
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+    
+    public int getProductIDByOD(int od) {
+        String query = "SELECT productID\n" +
+"FROM Orders_Detail \n" +
+"WHERE orderDetailID = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, od);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+    
+        public int getAmountByOD(int od) {
+        String query = "SELECT quantity\n" +
+"FROM Orders_Detail \n" +
+"WHERE orderDetailID = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, od);
             rs = ps.executeQuery();
             while (rs.next()) {
                 return rs.getInt(1);

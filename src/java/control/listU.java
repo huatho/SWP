@@ -36,8 +36,6 @@ public class listU extends HttpServlet {
         AdminDAO dao = new AdminDAO();
         List<Customer> listC = dao.getCustomer();
         request.setAttribute("listC", listC);
-        List<Sellers> listS = dao.getSellers();
-        request.setAttribute("listS", listS);
         request.getRequestDispatcher("admin/listUser.jsp").forward(request, response);
     }
 
@@ -45,7 +43,11 @@ public class listU extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int uid = Integer.parseInt(request.getParameter("id"));
+        int lock = Integer.parseInt(request.getParameter("lock"));
+        AdminDAO dao = new AdminDAO();
+        dao.updateLockUser(uid, lock);
+        response.sendRedirect("listU");
     }
 
     /**

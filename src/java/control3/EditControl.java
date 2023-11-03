@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlTH;
+package control3;
 
-import DAO.OrdersDAO;
+import DAO.OrderDAO;
+import DAO.StoreDAO;
+import entity.OrderSeller;
+import entity.Store;
 import java.io.IOException;
 
 import jakarta.servlet.ServletException;
@@ -13,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
@@ -50,7 +54,10 @@ public class EditControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        Store store = (Store) request.getSession().getAttribute("mystore");
+        OrderDAO dao = new OrderDAO();
+        List<OrderSeller> list = dao.getOrderSeller(store.getStoreID());
+        request.setAttribute("list", list);
         request.getRequestDispatcher("edit.jsp").forward(request, response);
     }
 
@@ -65,76 +72,31 @@ public class EditControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String orderid = request.getParameter("orderid");
-        String cartid = request.getParameter("cartid");
-        String foundeddate = request.getParameter("foundeddate");
-        String deliverydate = request.getParameter("deliverydate");
-        String address = request.getParameter("address");
-        String ppaymentway = request.getParameter("paymentway");
-        String ppaymentstatus = request.getParameter("paymentstatus");
-
-        int paymentway = Integer.parseInt(ppaymentway);
-        int paymentstatus = Integer.parseInt(ppaymentstatus);
-        if (paymentway == 1) {
-            if (paymentstatus == 1) {
-                String PaymentStatus = "3";
-                String Payment = "Chuyển khoản";
-                OrdersDAO dao = new OrdersDAO();
-                dao.editOrders(cartid, foundeddate, deliverydate, address, Payment, PaymentStatus, orderid);
-            }
-            else if(paymentstatus == 2) {
-                String PaymentStatus = "2";
-                String Payment = "Chuyển khoản";
-                OrdersDAO dao = new OrdersDAO();
-                dao.editOrders(cartid, foundeddate, deliverydate, address, Payment, PaymentStatus, orderid);
+      
+        String status = request.getParameter("status");
+        int od = Integer.parseInt(request.getParameter("od"));
+        OrderDAO dao = new OrderDAO();
+        StoreDAO storeDAO = new StoreDAO();
+        Store store = (Store) request.getSession().getAttribute("mystore");
+        if ("2".equals(status)) {
+            int pid = dao.getProductIDByOD(od);
+            int amountOrder = Integer.parseInt(request.getParameter("amount"));
+            int amountStore = storeDAO.getAmount(store.getStoreID(), pid);
+            if (amountStore>=amountOrder) {
+                request.setAttribute("msg", "Cập nhật thành công!");
+                storeDAO.updateAmount(store.getStoreID(), pid, amountStore-amountOrder);
+                dao.editOrderStatus(status, od);
             }
             else {
-                String PaymentStatus = "1";
-                String Payment = "Chuyển khoản";
-                OrdersDAO dao = new OrdersDAO();
-                dao.editOrders(cartid, foundeddate, deliverydate, address, Payment, PaymentStatus, orderid);
+                request.setAttribute("msg","Không đủ số lượng sản phẩm để duyệt đơn!");
             }
-        } else if (paymentway == 2) {
-            if (paymentstatus == 1) {
-                String PaymentStatus = "3";
-                String Payment = "Tiền mặt";
-                OrdersDAO dao = new OrdersDAO();
-                dao.editOrders(cartid, foundeddate, deliverydate, address, Payment, PaymentStatus, orderid);
-            }
-            else if (paymentstatus == 2) {
-                String PaymentStatus = "2";
-                String Payment = "Tiền mặt";
-                OrdersDAO dao = new OrdersDAO();
-                dao.editOrders(cartid, foundeddate, deliverydate, address, Payment, PaymentStatus, orderid);
-            }
-            else {
-                String PaymentStatus = "1";
-                String Payment = "Tiền mặt";
-                OrdersDAO dao = new OrdersDAO();
-                dao.editOrders(cartid, foundeddate, deliverydate, address, Payment, PaymentStatus, orderid);
-            }
-        } else {
-            if (paymentstatus == 1) {
-                String PaymentStatus = "3";
-                String Payment = "Ship COD";
-                OrdersDAO dao = new OrdersDAO();
-                dao.editOrders(cartid, foundeddate, deliverydate, address, Payment, PaymentStatus, orderid);
-            }
-            else if (paymentstatus == 2) {
-                String PaymentStatus = "2";
-                String Payment = "Ship COD";
-                OrdersDAO dao = new OrdersDAO();
-                dao.editOrders(cartid, foundeddate, deliverydate, address, Payment, PaymentStatus, orderid);
-            }
-            else {
-                String PaymentStatus = "1";
-                String Payment = "Ship COD";
-                OrdersDAO dao = new OrdersDAO();
-                dao.editOrders(cartid, foundeddate, deliverydate, address, Payment, PaymentStatus, orderid);
-            }
-        } 
-            
-        response.sendRedirect("homeServlet");
+        }
+        if (status.equals("3")) {
+            dao.editOrderStatus(status, od);
+        }
+        List<OrderSeller> list = dao.getOrderSeller(store.getStoreID());
+        request.setAttribute("list", list);
+        request.getRequestDispatcher("edit.jsp").forward(request, response);
     }
 
     /**

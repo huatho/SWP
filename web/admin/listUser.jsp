@@ -319,28 +319,28 @@
                                                     <c:if test="${c.roles == 3}">
                                                         <td>Khách hàng</td>
                                                     </c:if>
-                                                    <td>${c.customerName}</td>
-                                                    <td>${c.customerAdd}</td>
+                                                    <c:if test="${c.roles == 2}">
+                                                        <td>Người bán</td>
+                                                    </c:if>
+                                                    <td>${c.name}</td>
+                                                    <td>${c.address}</td>
                                                     <td>
-                                                        <a href="infoC?cid=${c.customerID}"><i class="fa fa-eye" aria-hidden="true"></i></i></a>
+                                                        <form method="POST" action="listU">
+                                                            <input hidden value="${c.id}" name="id"/>
+                                                            <c:if test="${c.lock==1}">
+                                                                <input hidden value="0" name="lock"/>
+                                                                <button class="btn btn-danger" type="submit">UNLOCK</button>
+                                                            </c:if>
+                                                            <c:if test="${c.lock==0}">
+                                                                <input hidden value="1" name="lock"/>
+                                                                <button class="btn btn-success" type="submit">LOCK</button>
+                                                            </c:if>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
 
-                                            <c:forEach items="${listS}" var= "s">
-                                                <tr>
-                                                    <td>${s.acc}</td>
-                                                    <td>${s.email}</td>
-                                                    <c:if test="${s.roles == 2}">
-                                                        <td>Người bán</td>
-                                                    </c:if>
-                                                    <td>${s.sellerName}</td>
-                                                    <td>${s.sellerAdd}</td>
-                                                    <td>
-                                                        <a href="infoSell?sid=${s.sellerID}"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
+                                            
                                         </tbody>
 
                                     </table>

@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlHau;
+package control2;
 
 import DAO.CartDAO;
 import DAO.DetailDAO;
@@ -51,15 +51,15 @@ public class Order extends HttpServlet {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String payWay = request.getParameter("pay");
-        int storeID = cartDAO.getStoreID(Integer.parseInt(listCheckout[0]));
         int total = (int) Double.parseDouble(request.getParameter("total"));
-        detailDAO.insertOrder(u.getId(), address, payWay, phone, name, total, storeID);
+        detailDAO.insertOrder(u.getId(), address, payWay, phone, name, total);
         int orderID = detailDAO.getIdNewestOrder();
 //        String[] orid  = request.getParameterValues("orid");
         for (String s: listCheckout) {
             int cid = Integer.parseInt(s);
+            int storeID = cartDAO.getStoreID(cid);
             CartDetail cd = cartDAO.getCartDetail(cid);
-            detailDAO.checkout(orderID, cd.getProductID(), cd.getAmount());
+            detailDAO.checkout(orderID, cd.getProductID(), cd.getAmount(), storeID);
             detailDAO.deleteCart(cid);
         }
 //        for(int i = 0; i < orid.length; i++) {

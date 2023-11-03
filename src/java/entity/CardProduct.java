@@ -20,6 +20,7 @@ public class CardProduct {
     private int storeID;
     private String storeName;
     private int totalProduct;
+    private int accept;
 
     public CardProduct(int productID, String productName, String descriptions, String sex, String imageLink, int price, int categoryID, String categoryName, int storeID, String storeName, int totalProduct) {
         this.productID = productID;
@@ -47,8 +48,21 @@ public class CardProduct {
         this.storeID = storeID;
         this.storeName = storeName;
     }
-    
-    
+
+    public CardProduct(int productID, String productName, String imageLink, int price, String categoryName, String storeName, int totalProduct, int accept) {
+        this.productID = productID;
+        this.productName = productName;
+        this.imageLink = imageLink;
+        this.price = price;
+        this.categoryName = categoryName;
+        this.storeName = storeName;
+        this.totalProduct = totalProduct;
+        this.accept = accept;
+    }
+
+    public int getAccept() {
+        return accept;
+    } 
 
     public int getProductID() {
         return productID;

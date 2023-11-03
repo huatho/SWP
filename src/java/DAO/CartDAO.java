@@ -126,7 +126,7 @@ public class CartDAO {
     }
     
     public int getStoreID(int id){       
-        String query = "SELECT TOP 1 storeID FROM Cart_Detail WHERE cartDetaiID = ?";
+        String query = "SELECT storeID FROM Cart_Detail WHERE cartDetaiID = ?";
         int storeID = 0;
         try{
             conn = new DBContext().getConnection();

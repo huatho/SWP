@@ -57,7 +57,7 @@
                                     <i class="fa fa-phone"></i>
                                 </div>
                                 <div class="hero__search__phone__text">
-                                    <h5>+84 9841 2548</h5>
+                                    <h5>+84 776218746</h5>
                                     <span>support 24/7 time</span>
                                 </div>
                             </div>

@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlHau;
+package control2;
 
 import DAO.CategoryDAO;
 import DAO.DetailDAO;
-import entity.Customer;
+import DAO.OrderDAO;
+import entity.OrderCustomer;
+import entity.User;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -38,16 +38,7 @@ public class ShowOrder extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        DetailDAO sor = new DetailDAO();
-        CategoryDAO categoryDAO = new CategoryDAO();
-        List<entity.Category> listCategory = categoryDAO.getAllCategory();
-        request.setAttribute("listAllCategory", listCategory);
-        int sod = Integer.parseInt(request.getParameter("sod"));
-        List<entity.Order> os = sor.ShowOrder(sod);
-      //  Customer oc = usD.getCustomer(5);
-        request.setAttribute("listShowOrder", os);
-        request.getRequestDispatcher("order.jsp").forward(request, response);
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -62,7 +53,18 @@ public class ShowOrder extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        DetailDAO sor = new DetailDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        List<entity.Category> listCategory = categoryDAO.getAllCategory();
+        request.setAttribute("listAllCategory", listCategory);
+        User user = (User) request.getSession().getAttribute("user");
+        int sod = user.getId();
+        List<OrderCustomer> os = sor.ShowOrder(sod);
+        List<OrderCustomer> listConfirm = sor.getListConfirm(sod);
+        request.setAttribute("listConfirm", listConfirm);
+        request.setAttribute("listShowOrder", os);
+        request.getRequestDispatcher("order.jsp").forward(request, response);
+
     }
 
     /**
@@ -76,7 +78,10 @@ public class ShowOrder extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int odid = Integer.parseInt(request.getParameter("odid"));
+        OrderDAO dao = new OrderDAO();
+        dao.editOrderStatus("3", odid);
+        response.sendRedirect("showOrder");
     }
 
     /**

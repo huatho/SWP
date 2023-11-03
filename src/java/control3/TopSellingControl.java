@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlTH;
+package control3;
 
 import DAO.DAO;
 import entity.topsellP;

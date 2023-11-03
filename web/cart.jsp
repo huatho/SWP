@@ -89,10 +89,10 @@ Author     : ADMIN
                                                         Chọn tất cả
                                                     </label>
                                                 </th>
-                                                <th class="shoping__product" style="text-align: center; ">Sản phẩm</th>
+                                                <th  class="shoping__product" style="text-align: center; ">Sản phẩm</th>
+                                                <th>Shop ID</th>
                                                 <th>Giá</th>
                                                 <th>Số lượng</th>
-                                                <th>Size,Màu</th>
                                                 <th>Tổng</th>
                                                 <th></th>
                                             </tr>
@@ -109,7 +109,10 @@ Author     : ADMIN
                                                 </td>
                                                 <td class="shoping__cart__item">
                                                     <img src="${c.imgLink}" alt="">
-                                                    <h5>${c.productName}</h5>
+                                                    <h5 style="margin-left: 50px">${c.productName}</h5>
+                                                </td>
+                                                <td class="shoping__cart__quantity">
+                                                    ${c.storeID}
                                                 </td>
                                                 <td class="shoping__cart__price">
                                                     <fmt:formatNumber value = "${c.price}" type = "currency"/>VNĐ

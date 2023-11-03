@@ -177,7 +177,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12">
+                </div>
+
+            </section>
+            <!-- Product Details Section End -->
+        </form>
+        <!-- Related Product Section Begin -->
+        <section class="related-product">
+            <div class="container">
+                <div class="col-lg-12">
                         <div class="product__details__tab">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
@@ -190,7 +198,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" aria-selected="false">Đánh
-                                        giá<span>(1)</span></a>
+                                        giá</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
@@ -247,66 +255,40 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                    <form method="POST" action="detail">
+                                        <div class="bg-light p-2">
+                                            <input hidden name="pid" value="${detail.productID}"/>
+                                            <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="images/cus1.png" width="40"><input class="form-control ml-1 shadow-none textarea" name="content" /> </div>
+                                            <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="submit">Post comment</button><button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button></div>
+                                        </div>
+                                    </form>
+                                    
                                     <div class="product__details__tab__desc">
-                                        <h6>Products Infomation</h6>
-                                        <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                            Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
-                                            Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac
-                                            diam
-                                            sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue
-                                            leo
-                                            eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
-                                            Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.
-                                            Praesent
-                                            sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum
-                                            ac
-                                            diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
-                                            ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-                                            Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet
-                                            ligula.
-                                            Proin eget tortor risus.</p>
+                                        <c:forEach items="${listReview}" var="r">
+                                            <div class="card mb-4">
+                                                <div class="card-body">
+                                                  <p>${r.content}</p>
+                                                  <div class="d-flex justify-content-between">
+                                                    <div class="d-flex flex-row align-items-center">
+                                                      <img src="images/cus1.png" alt="avatar" width="25"
+                                                        height="25" />
+                                                      <p class="small mb-0 ms-2">${r.userName}</p>
+                                                    </div>
+                                                    <div class="d-flex flex-row align-items-center">
+                                                      <p class="small text-muted mb-0">Upvote?</p>
+                                                      <i class="far fa-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
+                                                      <p class="small text-muted mb-0">3</p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-            </section>
-            <!-- Product Details Section End -->
-        </form>
-        <!-- Related Product Section Begin -->
-        <section class="related-product">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="section-title related__product__title">
-                            <h2>Sản phẩm liên quan</h2>
-                        </div>
-                    </div>
-                </div>
-                <%--<c:forEach items="listProductSameID" var="o">--%>
-                <div class="row categories__slider owl-carousel">
-                    <c:forEach items="${listProductSameID}" var="o">
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            <div class="product__item">
-                                <div class="product__item__pic set-bg" data-setbg="${o.imageLink}">
-                                    <ul class="product__item__pic__hover">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                    </ul>
-                                </div>
-                                <div class="product__item__text">
-                                    <h6><a href="detail?productID=${o.productID}">${o.productName}</a></h6>
-                                    <h5>${o.priceWithDot}</h5>
-<!--                                    {o.totalProduct == 0 ? "<h6>hết hàng</h6>":""}-->
-                                </div>
-                            </div>
-                        </div>  
-                    </c:forEach>
-                </div>
-                <%--</c:forEach>--%>
             </div>
         </section>
         <!-- Related Product Section End -->

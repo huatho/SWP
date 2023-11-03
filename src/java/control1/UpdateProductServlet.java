@@ -1,4 +1,4 @@
-package controlBao;
+package control1;
 
 import DAO.ProductDAO;
 import DAO.StoreDAO;

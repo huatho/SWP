@@ -49,9 +49,9 @@ public class Search extends HttpServlet {
             endPage++;
         }
 
-        List<entity.Product> listProductSearch = productDAO.pagingProductBySearch(txtSearch, index);
+        List<entity.CardProduct> listProductSearch = productDAO.pagingProductBySearch(txtSearch, index);
         List<entity.Category> listCategory = categoryDAO.getAllCategory();
-        List<entity.Product> listTop = productDAO.getTopProduct();
+        List<entity.CardProduct> listTop = productDAO.getTopProduct();
 
         request.setAttribute("listTop", listTop); //top sản phẩm bán chạy
         request.setAttribute("listAllCategory", listCategory);

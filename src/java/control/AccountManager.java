@@ -36,7 +36,6 @@ public class AccountManager extends HttpServlet {
         
         AdminDAO adminDao = new AdminDAO();
         List<Account> list = adminDao.getAllAccounts();
-        
         request.setAttribute("listAcc", list);
         request.getRequestDispatcher("admin/adminDashboard.jsp").forward(request, response);
 

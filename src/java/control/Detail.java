@@ -8,11 +8,14 @@ package control;
 import DAO.CategoryDAO;
 import DAO.DetailDAO;
 import DAO.ProductDAO;
+import DAO.ReviewDAO;
 import entity.CardProduct;
 import entity.Category;
 import entity.Color;
 import entity.Product;
+import entity.Review;
 import entity.Size;
+import entity.User;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -40,29 +43,7 @@ public class Detail extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String ID  = request.getParameter("productID");
-        String storeID = request.getParameter("storeID");
         
-        CategoryDAO categoryDAO = new CategoryDAO();
-        ProductDAO productDAO = new ProductDAO();
-        DetailDAO detailDAO = new DetailDAO();
-        
-        int productID = Integer.parseInt(ID);
-        
-        Product productDetail = productDAO.getProductByID(productID);
-        List<CardProduct> listProductSame = productDAO.getProductSame(productID);
-        List<Category> listCategory = categoryDAO.getAllCategory();
-//        List<Color> listColor = detailDAO.getListColor(productID);//lấy list màu và ảnh của màu đó
-//        List<Size> listSize = detailDAO.getListSize(productID);//lấy list size
-        int countProduct = detailDAO.getCountProduct(Integer.parseInt(storeID), productID);
-        request.setAttribute("listProductSameID", listProductSame);
-        request.setAttribute("listAllCategory", listCategory);
-//        request.setAttribute("listSize", listSize);
-//        request.setAttribute("listColor", listColor);
-        request.setAttribute("countProduct", countProduct);
-        request.setAttribute("detail", productDetail);
-        request.setAttribute("storeID", storeID);
-        request.getRequestDispatcher("Detail.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -77,7 +58,30 @@ public class Detail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String ID  = request.getParameter("productID");
+        String storeID = request.getParameter("storeID");
+        
+        CategoryDAO categoryDAO = new CategoryDAO();
+        ProductDAO productDAO = new ProductDAO();
+        DetailDAO detailDAO = new DetailDAO();
+        
+        int productID = Integer.parseInt(ID);
+        
+        Product productDetail = productDAO.getProductByID(productID);
+        List<CardProduct> listProductSame = productDAO.getProductSame(productID);
+        List<Category> listCategory = categoryDAO.getAllCategory();
+
+        int countProduct = detailDAO.getCountProduct(Integer.parseInt(storeID), productID);
+        ReviewDAO reviewDAO = new ReviewDAO();
+        List<Review> listReview = reviewDAO.getReviewByProductID(productID);
+        request.setAttribute("listReview", listReview);
+        System.out.println(listReview.size());
+        request.setAttribute("listProductSameID", listProductSame);
+        request.setAttribute("listAllCategory", listCategory);
+        request.setAttribute("countProduct", countProduct);
+        request.setAttribute("detail", productDetail);
+        request.setAttribute("storeID", storeID);
+        request.getRequestDispatcher("Detail.jsp").forward(request, response);
     }
 
     /**
@@ -91,7 +95,12 @@ public class Detail extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String content = request.getParameter("content");
+        int pid = Integer.parseInt(request.getParameter("pid"));
+        ReviewDAO reviewDAO = new ReviewDAO();
+        User user = (User) request.getSession().getAttribute("user");
+        reviewDAO.addReview(pid, user.getId(), content);
+        response.sendRedirect("detail");
     }
 
     /**

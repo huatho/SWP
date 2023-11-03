@@ -20,7 +20,7 @@ public class UserDAO {
     ResultSet rs = null;
     
     public void addUser(User user){
-        String query = "INSERT INTO Users(userName, pass, fullName, email, phone, userAddress, roleID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Users(userName, pass, fullName, email, phone, userAddress, roleID, lock) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -38,7 +38,7 @@ public class UserDAO {
     
     public User login(String acc, String pass){
         
-        String query = "SELECT * FROM Users WHERE userName = ? AND pass = ?";
+        String query = "SELECT * FROM Users WHERE userName = ? AND pass = ? AND lock = 0";
         User u = null;
         try{
             conn = new DBContext().getConnection();

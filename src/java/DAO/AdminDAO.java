@@ -2,6 +2,7 @@ package DAO;
 
 import entity.Account;
 import entity.AdminProfile;
+import entity.CardProduct;
 import entity.Count;
 import entity.Customer;
 import entity.Product;
@@ -40,7 +41,7 @@ public class AdminDAO {
     public List<Account> getAllAccounts() {
 
         List<Account> list = new ArrayList<>();
-        String query = "select * from ManageUsers where Roles != 1";
+        String query = "select userID, userName, pass, email, roleID from Users where roleID != 1";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -56,27 +57,27 @@ public class AdminDAO {
     }
 
     public Count countUser() {
-        Count user = new Count();
+        Count c = null;
         try {
             String query = "SELECT COUNT(*) \n"
-                    + "FROM ManageUsers";
+                    + "FROM Users";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
-                user = new Count(rs.getInt(1));
+                c = new Count(rs.getInt(1)-1);
             }
-            return user;
         } catch (Exception e) {
         }
-        return null;
+        
+        return c;
     }
 
     public Count countStore() {
         Count store = new Count();
         try {
             String query = "SELECT COUNT(*) \n"
-                    + "FROM Store";
+                    + "FROM Stores";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
@@ -93,7 +94,7 @@ public class AdminDAO {
         Count product = new Count();
         try {
             String query = "SELECT COUNT(*) \n"
-                    + "FROM Product";
+                    + "FROM Products";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
@@ -140,38 +141,20 @@ public class AdminDAO {
 
     public List<Customer> getCustomer() {
         List<Customer> listC = new ArrayList<>();
-        String query = "Select CustomerID, CustomerName, Phone, CustomerAddress, Avatar, path, Customers.UserID,  ManageUsers.UserName, ManageUsers.Passwords, ManageUsers.email, ManageUsers.Roles\n"
-                + "from Customers, ManageUsers\n"
-                + "where ManageUsers.UserID = Customers.UserID";
+        String query = " Select userID, fullName, phone, userAddress, userName, pass, email, roleID, lock\n" +
+"from Users\n" +
+"WHERE roleID != 1";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
                 listC.add(new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getString(6), rs.getInt(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getInt(11)));
+                        rs.getString(6), rs.getString(7), rs.getInt(8), rs.getInt(9)));
             }
         } catch (Exception e) {
         }
         return listC;
-    }
-
-    public List<Sellers> getSellers() {
-        List<Sellers> listS = new ArrayList<>();
-        String query = "Select SellerID, SellerName, Phone, SellerAddress, Avatar, path, Sellers.UserID, ManageUsers.UserName, ManageUsers.Passwords, ManageUsers.email, ManageUsers.Roles\n"
-                + "from Sellers, ManageUsers\n"
-                + "where ManageUsers.UserID = Sellers.UserID";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listS.add(new Sellers(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getString(6), rs.getInt(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getInt(11)));
-            }
-        } catch (Exception e) {
-        }
-        return listS;
     }
 
     public List<Customer> searchCus(String txtSearch) {
@@ -310,34 +293,32 @@ public class AdminDAO {
         }
     }
 
-    public List<Product> getListProduct() {
-        List<Product> listP = new ArrayList<>();
-        String query = "select p.ProductID, p.ProductName, p.Descriptions, p.Sex, p.ImageLink, p.Price, p.CategoryID, c.CategoryName, p.StoreID, s.StoreName, sum(pd.CountProduct) as totalProduct\n"
-                + "from Product as p\n"
-                + "left outer join ProductDetail as pd on (p.ProductID = pd.ProductID)\n"
-                + "left outer join Store as s on (p.StoreID = s.StoreID)\n"
-                + "left outer join Category as c on (p.CategoryID = c.CategoryID)\n"
-                + "group by p.ProductID, p.ProductName, p.Descriptions, p.Sex, p.ImageLink, p.Price, p.CategoryID, c.CategoryName, p.StoreID, s.StoreName";
+    public List<CardProduct> getListProduct() {
+        List<CardProduct> listP = new ArrayList<>();
+        String query = "select p.productID, p.productName, p.imageLink, p.price, c.categoryName, s.storeName, sd.amount as totalProduct, p.accept\n" +
+"                from Products as p\n" +
+"				inner join Store_Detail as sd on sd.productID = p.productID\n" +
+"                inner join Stores as s on (sd.storeID = s.storeID)\n" +
+"                inner join Category as c on (p.CategoryID = c.CategoryID)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
-                listP.add(new Product(rs.getString(1),
+                listP.add(new CardProduct(rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
-                        rs.getString(4),
+                        rs.getInt(4),
                         rs.getString(5),
-                        rs.getInt(6),
+                        rs.getString(6),
                         rs.getInt(7),
-                        rs.getString(8),
-                        rs.getInt(9),
-                        rs.getString(10),
-                        rs.getInt(11)));
+                        rs.getInt(8)
+                        ));
             }
         } catch (Exception e) {
         }
         return listP;
+        
     }
 
     public void addCategory(String categoryID, String categoryName) {
@@ -351,6 +332,31 @@ public class AdminDAO {
         } catch (Exception e) {
         }
     }
+    
+    public void acceptProduct(int pid, int accept) {
+        String query = "UPDATE Products SET accept = ? WHERE productID = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, accept);
+            ps.setInt(2, pid);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+    
+    public void updateLockUser(int id, int lock) {
+        String query = "UPDATE Users SET lock = ? WHERE userID = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, lock);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+    
 
     public static void main(String[] args) {
         AdminDAO dao = new AdminDAO();

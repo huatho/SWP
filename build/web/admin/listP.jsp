@@ -132,7 +132,7 @@
                                     <span class="navbar-toggler-bar bar3"></span>
                                 </button>
                             </div>
-                            <a class="navbar-brand" href="">Quàn lý sản phẩm</a>
+                            <a class="navbar-brand" href="">Quản lý sản phẩm</a>
                         </div>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
                                 aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -341,11 +341,11 @@
                                             <tr>
                                                 <th>Tên sản phẩm</th>
                                                 <th>Ảnh</th>
-                                                <th>Dành cho</th>
                                                 <th>Giá</th>
                                                 <th>Loại</th>
                                                 <th>Tên Shop</th>
                                                 <th>Tình trạng</th>
+                                                <th>Duyệt</th>
                                             </tr>
                                         </thead>
 
@@ -354,7 +354,6 @@
                                                 <tr>
                                                     <td>${p.productName}</td>
                                                     <td><img src="${p.imageLink}" style="width: 200px; height: 200px; object-fit: contain;"/></td>
-                                                    <td>${p.sex}</td>
                                                     <td>${p.getPriceWithDot()}đ</td>
                                                     <td>${p.categoryName}</td>
                                                     <td>${p.storeName}</td>
@@ -366,6 +365,25 @@
                                                             <td style="color: red; font-weight: 600;">Hết Hàng</td> 
                                                         </c:otherwise>
                                                     </c:choose>
+                                                            <td>
+                                                                <form method="POST" action="listProduct">
+                                                                    <c:if test="${p.accept==1}">
+                                                                        <select name="accept">
+                                                                            <option value="1" selected>Yes</option>
+                                                                            <option value="0">No</option>
+                                                                        </select>
+                                                                    </c:if>
+                                                                    <c:if test="${p.accept==0}">
+                                                                        <select name="accept">
+                                                                            <option value="1">Yes</option>
+                                                                            <option value="0" selected>No</option>
+                                                                        </select>
+                                                                    </c:if>
+                                                                    <br>
+                                                                    <input hidden value="${p.productID}" name="productID"/>
+                                                                    <button type="submit" class="btn btn-success">Save</button> 
+                                                                </form>
+                                                            </td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
