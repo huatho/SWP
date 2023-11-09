@@ -10,55 +10,42 @@ package entity;
  * @author trung
  */
 public class topsellP {
-    private String ProductName;
-    private double priceProduct;
-    private int Amount;
-    private double Price;
+    private int id;
+    private String name;
+    private double price;
+    private int amount;
+    private int total;
 
     public topsellP() {
     }
 
-    public topsellP(String ProductName, double priceProduct, int Amount, double Price) {
-        this.ProductName = ProductName;
-        this.priceProduct = priceProduct;
-        this.Amount = Amount;
-        this.Price = Price;
+    public topsellP(int id, String name, double price, int amount, int total) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.amount = amount;
+        this.total = total;
     }
 
-    public String getProductName() {
-        return ProductName;
+    public int getId() {
+        return id;
     }
 
-    public void setProductName(String ProductName) {
-        this.ProductName = ProductName;
-    }
-
-    public double getPriceProduct() {
-        return priceProduct;
-    }
-
-    public void setPriceProduct(double priceProduct) {
-        this.priceProduct = priceProduct;
-    }
-
-    public int getAmount() {
-        return Amount;
-    }
-
-    public void setAmount(int Amount) {
-        this.Amount = Amount;
+    public String getName() {
+        return name;
     }
 
     public double getPrice() {
-        return Price;
+        return price;
     }
 
-    public void setPrice(double Price) {
-        this.Price = Price;
+    public int getAmount() {
+        return amount;
     }
 
-    @Override
-    public String toString() {
-        return "topsellP{" + "ProductName=" + ProductName + ", priceProduct=" + priceProduct + ", Amount=" + Amount + ", Price=" + Price + '}';
+    public int getTotal() {
+        return total;
     }
+
+
 }

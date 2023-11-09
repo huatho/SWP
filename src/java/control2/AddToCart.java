@@ -94,16 +94,17 @@ public class AddToCart extends HttpServlet {
                     cartDAO.addToCart(newCart.getCartID(), Integer.parseInt(productId), size, color, quantity, Integer.parseInt(storeID));
                     response.sendRedirect("home");
                 }else {
-                    CartDetail cdetail = cartDAO.getDetail(cart.getCartID(), Integer.parseInt(productId), size, color, Integer.parseInt(storeID));
+                    CartDetail cdetail = cartDAO.getDetail(cart.getCartID(), Integer.parseInt(productId), Integer.parseInt(storeID));
                     if (cdetail == null) {
                         cartDAO.addToCart(cart.getCartID(), Integer.parseInt(productId), size, color, quantity, Integer.parseInt(storeID));
                     }
                     else {
-                        cartDAO.updateCart(cdetail.getCartDetailID(), cdetail.getAmount()+quantity);
+                        int newAmount = cdetail.getAmount()+quantity;
+                        cartDAO.updateCart(cdetail.getCartDetailID(), newAmount);
                     }
 //                    int quan = c.getAmount() + quantity;
 //                    dao.updateCart(quan, c.getCartID());
-                    response.sendRedirect("showCart"); }
+                    response.sendRedirect("home"); }
 //                } else {
 //                    dao.insertCart(cid, st.getStoreId(), productId, size, color, quantity);
 //                    request.getRequestDispatcher("detail?productID=" + productId).forward(request, response);

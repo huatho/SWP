@@ -74,12 +74,12 @@
                                 <p>Quản lý sản phẩm</p>
                             </a>
                         </li>
-<!--                        <li>
-                            <a href="get-chat">
+                        <li>
+                            <a href="top-seller">
                                 <i class="fa fa-comment" aria-hidden="true"></i>
-                                <p>Doanh thu</p>
+                                <p>Top Seller</p>
                             </a>
-                        </li>-->
+                        </li>
                     </ul>
                 </div>
             </div>

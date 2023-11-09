@@ -72,17 +72,16 @@ public class CartDAO {
         }
     }
     
-    public CartDetail getDetail(int cid, int pid, String size, String color, int storeID){       
-        String query = "  SELECT * FROM Cart_Detail WHERE cartID = ? AND productID = ? AND size = ? AND color = ? AND storeID = ?";
+    public CartDetail getDetail(int cid, int pid, int storeID){       
+        String query = "  SELECT * FROM Cart_Detail WHERE cartID = ? AND productID = ? AND storeID = ?";
         CartDetail c = null;
         try{
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setInt(1, cid);
             ps.setInt(2, pid);
-            ps.setString(3, size);
-            ps.setString(4, color);
-            ps.setInt(5, storeID);
+            
+            ps.setInt(3, storeID);
             rs = ps.executeQuery();
             while(rs.next()){
                 c = new CartDetail(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getInt(7));
@@ -95,12 +94,12 @@ public class CartDAO {
     }
     
     public void updateCart(int cdetailID, int quantity){       
-        String query = "UPDATE Cart_Detail SET amount = ? WHERE cartDetailID = ?";
+        String query = "UPDATE Cart_Detail SET amount = ? WHERE cartDetaiID = ?";
         try{
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setInt(1, cdetailID);
-            ps.setInt(2, quantity);
+            ps.setInt(1, quantity);
+            ps.setInt(2, cdetailID);
             ps.executeUpdate();
         }catch(Exception e){
             

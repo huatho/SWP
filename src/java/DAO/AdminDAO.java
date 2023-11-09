@@ -127,7 +127,7 @@ public class AdminDAO {
     public int lastCategoryId() {
         int num = 0;
         try {
-            String query = "SELECT TOP 1 CategoryID FROM Category ORDER BY CategoryID DESC";
+            String query = "SELECT TOP 1 CategoryID FROM Category ORDER BY CONVERT(int, CategoryID) DESC";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();

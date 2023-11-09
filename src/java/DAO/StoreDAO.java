@@ -8,6 +8,7 @@ import entity.Product;
 import entity.Store;
 import entity.StoreDetail;
 import entity.User;
+import entity.topsellP;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -173,5 +174,27 @@ public class StoreDAO {
         } catch (Exception e) {
         }
         return a;
+    }
+    
+    public List<topsellP> getTopSell(int storeID) {
+            String query = "SELECT p.productID, productName, price, SUM(quantity), (SUM(quantity)*price) as total\n" +
+"FROM Products as p INNER JOIN Orders_Detail as od ON p.productID = od.productID\n" +
+"WHERE storeID = ? AND orderStatus = 3\n" +
+"GROUP BY p.productID, productName, price\n" +
+"ORDER BY total DESC";
+        List<topsellP> l = new ArrayList<>();
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+           
+            ps.setInt(1, storeID);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                topsellP t = new topsellP(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
+                l.add(t);
+            }
+        } catch (Exception e) {
+        }
+        return l;
     }
 }

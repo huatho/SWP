@@ -164,7 +164,7 @@
                                     <div class="quantity">
                                         <div class="buttons_added" style="padding-top: 16px;">
                                             <input class="minus is-form" type="button" value="-">
-                                            <input name="quantity" aria-label="quantity" class="input-qty" max=${countProduct} min="1" name="" type="number" value="1">
+                                            <input name="quantity" aria-label="quantity" class="input-qty" max=${countProduct} min="1" type="number" value="1">
                                             <input class="plus is-form" type="button" value="+">
                                         </div>
                                     </div>

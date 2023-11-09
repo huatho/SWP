@@ -103,7 +103,7 @@
                     <ul class="navbar-nav mr-auto">
                         <!--item in header-->
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Trang chủ <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="home">Trang chủ <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
                             <div  class="nav-link" id="menu_icon"><i class="bi bi-list"></i></div>
@@ -167,99 +167,7 @@
 
 
         <!--4 thong tin-->
-        <div class="row list123" style="margin: 0;
-             font-family: Nunito,sans-serif;
-             font-size: .9rem;
-             font-weight: 400;
-             line-height: 1.5;
-             color: #6c757d;
-             background-color: #fafbfe;
-             -webkit-text-size-adjust: 100%;
-             -webkit-tap-highlight-color: transparent;">
-            <div class="col-lg-6 col-xl-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <h5 class="text-muted fw-normal mt-0 text-truncate" title="Campaign Sent">Campaign Sent</h5>
-                                <h3 class="my-2 py-1">9,184</h3>
-                                <p class="mb-0 text-muted">
-                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 3.27%</span>
-                                </p>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-end">
-                                    <div id="campaign-sent-chart" data-colors="#727cf5"></div>
-                                </div>
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end card-body -->
-                </div> <!-- end card -->
-            </div> <!-- end col -->
-
-            <div class="col-lg-6 col-xl-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <h5 class="text-muted fw-normal mt-0 text-truncate" title="New Leads">New Leads</h5>
-                                <h3 class="my-2 py-1">3,254</h3>
-                                <p class="mb-0 text-muted">
-                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 5.38%</span>
-                                </p>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-end">
-                                    <div id="new-leads-chart" data-colors="#0acf97"></div>
-                                </div>
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end card-body -->
-                </div> <!-- end card -->
-            </div> <!-- end col -->
-
-            <div class="col-lg-6 col-xl-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <h5 class="text-muted fw-normal mt-0 text-truncate" title="Deals">Deals</h5>
-                                <h3 class="my-2 py-1">861</h3>
-                                <p class="mb-0 text-muted">
-                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                </p>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-end">
-                                    <div id="deals-chart" data-colors="#727cf5"></div>
-                                </div>
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end card-body -->
-                </div> <!-- end card -->
-            </div> <!-- end col -->
-
-            <div class="col-lg-6 col-xl-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <h5 class="text-muted fw-normal mt-0 text-truncate" title="Booked Revenue">Booked Revenue</h5>
-                                <h3 class="my-2 py-1">$253k</h3>
-                                <p class="mb-0 text-muted">
-                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 11.7%</span>
-                                </p>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-end">
-                                    <div id="booked-revenue-chart" data-colors="#0acf97"></div>
-                                </div>
-                            </div>
-                        </div> <!-- end row-->
-                    </div> <!-- end card-body -->
-                </div> <!-- end card -->
-            </div> <!-- end col -->
-        </div>
+        
         <!-- end row -->
 
 
@@ -307,13 +215,12 @@
                             <tbody class="bg-white">
                                 <c:set var="index" value="0" />
                                 <c:forEach items="${listTopSell}" var="ts">
-                                    <c:set var="index" value="${index + 1}"/>
                                     <tr>
-                                        <th scope="row">${index}</th>
-                                        <td>${ts.productName}</td>
-                                        <td><fmt:formatNumber value = "${ts.priceProduct}" type = "currency"/></td>
+                                        <th scope="row">${ts.id}</th>
+                                        <td>${ts.name}</td>
+                                        <td><fmt:formatNumber value = "${ts.price}" type = "currency"/></td>
                                         <td>${ts.amount}</td> 
-                                        <td><fmt:formatNumber value = "${ts.price}" type = "currency"/></td> 
+                                        <td><fmt:formatNumber value = "${ts.total}" type = "currency"/></td> 
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -347,13 +254,13 @@
                 var data = google.visualization.arrayToDataTable([
                     ['Product', 'Price'],
             <c:forEach items="${listTopSell}" var="ts">
-                    ["${ts.productName}", ${ts.price}],
+                    ["${ts.name}", ${ts.total}],
             </c:forEach>
                 ]);
                 var options = {
                     chart: {
-                        title: '',
-                    }
+                        title: ''
+                    }   
                 };
 
                 var chart = new google.charts.Bar(document.getElementById('columnchart_material'));

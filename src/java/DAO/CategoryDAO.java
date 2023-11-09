@@ -70,6 +70,19 @@ public class CategoryDAO {
         }
         return null;
     }
+    
+    public void addCategory(String cid, String name) {
+         String query = "INSERT INTO Category(categoryID, categoryName) VALUES(?, ?)";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, cid);
+            ps.setString(2, name);
+            ps.executeUpdate();
+           
+        } catch (Exception e) {
+        }
+    }
 
     public static void main(String[] args) {
         CategoryDAO categoryDAO = new CategoryDAO();

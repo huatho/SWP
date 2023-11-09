@@ -91,7 +91,7 @@ public class EditControl extends HttpServlet {
                 request.setAttribute("msg","Không đủ số lượng sản phẩm để duyệt đơn!");
             }
         }
-        if (status.equals("3")) {
+        if (status.equals("0")) {
             dao.editOrderStatus(status, od);
         }
         List<OrderSeller> list = dao.getOrderSeller(store.getStoreID());
