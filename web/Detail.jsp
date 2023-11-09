@@ -124,12 +124,12 @@
                             <div class="product__details__text">
                                 <h3>${detail.productName}</h3>
                                 <div class="product__details__rating">
+<!--                                    <i class="fa fa-star"></i>
                                     <i class="fa fa-star"></i>
                                     <i class="fa fa-star"></i>
                                     <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-half-o"></i>
-                                    <span>(18 reviews)</span>
+                                    <i class="fa fa-star-half-o"></i>-->
+                                    <span>(${listReview.size()} reviews)</span>
                                 </div>
                                 <div class="product__details__price">${detail.priceWithDot}</div>
                                 <!--                            <form action="detail" method="GET" id="inforDetail">-->
@@ -255,13 +255,17 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="tabs-3" role="tabpanel">
-                                    <form method="POST" action="detail">
-                                        <div class="bg-light p-2">
-                                            <input hidden name="pid" value="${detail.productID}"/>
-                                            <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="images/cus1.png" width="40"><input class="form-control ml-1 shadow-none textarea" name="content" /> </div>
-                                            <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="submit">Post comment</button><button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button></div>
-                                        </div>
-                                    </form>
+                                    <c:if test="${canComment}">
+                                        <form method="POST" action="detail">
+                                            <div class="bg-light p-2">
+                                                <input hidden name="pid" value="${detail.productID}"/>
+                                                <input hidden name="sid" value="${storeID}" />
+                                                <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="images/cus1.png" width="40"><input class="form-control ml-1 shadow-none textarea" name="content" /> </div>
+                                                <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="submit">Post comment</button><button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Cancel</button></div>
+                                            </div>
+                                        </form>
+                                    </c:if>
+                                    
                                     
                                     <div class="product__details__tab__desc">
                                         <c:forEach items="${listReview}" var="r">
@@ -272,7 +276,7 @@
                                                     <div class="d-flex flex-row align-items-center">
                                                       <img src="images/cus1.png" alt="avatar" width="25"
                                                         height="25" />
-                                                      <p class="small mb-0 ms-2">${r.userName}</p>
+                                                      <p class="small mb-0 ms-2">user${sessionScope.user.id}</p>
                                                     </div>
                                                     <div class="d-flex flex-row align-items-center">
                                                       <p class="small text-muted mb-0">Upvote?</p>

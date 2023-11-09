@@ -68,6 +68,7 @@ public class Order extends HttpServlet {
 //                System.out.println("order: " + orid[i] + address + payWay);
 //        }
         response.sendRedirect("home");
+//            request.getRequestDispatcher("vnpay.jsp")
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

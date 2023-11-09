@@ -53,45 +53,9 @@ public class DetailDAO {
 //        }
 //        return null;
 //    }
-    public List<Color> getListColor(int productID) {
-        List<Color> listColor = new ArrayList<>();
-        String query = "SELECT pimage.Color, pimage.linkImageColor\n"
-                + " FROM Products as p\n"
-                + " left join Product_Image as pimage ON p.productID = pimage.productID\n"
-                + " where p.ProductID = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, productID);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Color c = new Color(rs.getString(1),
-                                    rs.getString(2));
-                listColor.add(c);
-            }
-        } catch (Exception e) {
-        }
-        return listColor;
-    }
+   
 
-    public List<Size> getListSize(int productID) {
-        List<Size> listSize = new ArrayList<>();
-        String query = "Select DISTINCT pd.size\n"
-                + "From Product_Detail As pd\n"
-                + "where pd.productID = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, productID);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Size z = new Size(rs.getString(1));
-                listSize.add(z);
-            }
-        } catch (Exception e) {
-        }
-        return listSize;
-    }
+    
 
     public int getCountProduct(int storeID, int productID) {
         String query = "  SELECT amount \n" +
@@ -110,44 +74,7 @@ public class DetailDAO {
         }
         return 0;
     }
-public Cart showCart1(String cus, int stt, String size, String color, int cid) {
-        String query = "select ct.* from Product p, Cart ct, ProductDetail pd, Customers c\n" +
-                        "where p.ProductID = pd.ProductID\n" +
-                        "and ct.ProductID = p.ProductID \n" +
-                        "and ct.Size = pd.Size\n" +
-                        "and ct.Color = pd.Color\n" +
-                        "and c.CustomerID = ct.CustomerID\n" +
-                        "and ct.[Status] < ?\n" +
-                        "and ct.ProductID = ?\n" +
-                        "and ct.Size = ?\n" +
-                        "and ct.Color = ?\n" +
-                        "and ct.CustomerID = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, stt);
-            ps.setString(2, cus);
-            ps.setString(3, size);
-            ps.setString(4, color);
-            ps.setInt(5, cid);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return new Cart(
-                        rs.getInt(1),
-                        rs.getInt(2),
-                        rs.getInt(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getInt(7),
-                        rs.getInt(8));
-            }
-        } catch (Exception e) {
 
-        }
-        return null;
-
-    }
  public void insertCart(int cusID, String sID, String pID, String size, String color, int quantity) {
         String query = "Insert into Cart values (?,?,?,?,?,?,1)";
         try {
@@ -209,7 +136,8 @@ public Cart showCart1(String cus, int stt, String size, String color, int cid) {
         return list;
 
     }
- public void deleteCart(int CartID) {
+ 
+    public void deleteCart(int CartID) {
         String query = "  delete Cart_Detail where cartDetaiID = ?";
         try {
             conn = new DBContext().getConnection();
@@ -279,89 +207,9 @@ public Cart showCart1(String cus, int stt, String size, String color, int cid) {
        }
         return null;
    }
- public List<Size> showSizeProducts(int stt, int ct) {
-        List<Size> list = new ArrayList<>();
-        String query = "select DISTINCT pd.Size from Product p, Cart ct, ProductDetail pd, Customers c\n"
-                + "where p.ProductID = pd.ProductID\n"
-                + "and ct.ProductID = p.ProductID \n"
-                + "and c.CustomerID = ct.CustomerID\n"
-                + "and ct.[Status] < ?\n"
-                + "and ct.CartID = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, stt);
-            ps.setInt(2, ct);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Size(
-                        rs.getString(1)));
-            }
-        } catch (Exception e) {
-
-        }
-        return list;
-
-    }
- public Carts showCart1s(int stt, int ct) {
-        String query = "select ct.*, p.ProductName, p.ImageLink, p.Price, p.Price * ct.Amount as total\n"
-                + "from Product p, Cart ct, ProductDetail pd, Customers c\n"
-                + "where p.ProductID = pd.ProductID\n"
-                + "and ct.ProductID = p.ProductID \n"
-                + "and ct.Size = pd.Size\n"
-                + "and ct.Color = pd.Color\n"
-                + "and c.CustomerID = ct.CustomerID\n"
-                + "and ct.[Status] < ?\n"
-                + "and ct.CartID = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, stt);
-            ps.setInt(2, ct);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return new Carts(
-                        rs.getInt(1),
-                        rs.getInt(2),
-                        rs.getInt(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getInt(7),
-                        rs.getInt(8),
-                        rs.getString(9),
-                        rs.getString(10),
-                        rs.getDouble(11),
-                        rs.getDouble(12));
-            }
-        } catch (Exception e) {
-
-        }
-        return null;
-
-    }
- public List<Colors> getListColors(int stt, int ct) {
-        List<Colors> listColor = new ArrayList<>();
-        String query = "select DISTINCT pd.Color from Product p, Cart ct, ProductDetail pd, Customers c\n"
-                + "where p.ProductID = pd.ProductID\n"
-                + "and ct.ProductID = p.ProductID \n"
-                + "and c.CustomerID = ct.CustomerID\n"
-                + "and ct.[Status] < ?\n"
-                + "and ct.CartID = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, stt);
-            ps.setInt(2, ct);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listColor.add(new Colors(
-                        rs.getString(1)));
-            }
-        } catch (Exception e) {
-        }
-        return listColor;
-    }
+ 
+ 
+ 
  public void updateCarts(String Color, String Size, int Amount, int CartID) {
         String query = "update Cart set Color = ?, Size = ?, Amount = ? where CartID = ?";
         try {
@@ -461,7 +309,7 @@ public Cart showCart1(String cus, int stt, String size, String color, int cid) {
 
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setInt(2, oid);
+            ps.setInt(1, oid);
             ps.executeUpdate();
         } catch (Exception e) {
         }

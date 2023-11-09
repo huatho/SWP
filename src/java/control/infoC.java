@@ -32,11 +32,11 @@ public class infoC extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-           int id = Integer.parseInt(request.getParameter("cid"));
-           AdminDAO dao = new AdminDAO();
-           Customer cus = dao.getCById(id);
-           request.setAttribute("cus", cus);
-           request.getRequestDispatcher("admin/infoCus.jsp").forward(request, response);
+//           int id = Integer.parseInt(request.getParameter("cid"));
+//           AdminDAO dao = new AdminDAO();
+//           Customer cus = dao.getCById(id);
+//           request.setAttribute("cus", cus);
+//           request.getRequestDispatcher("admin/infoCus.jsp").forward(request, response);
     }
 
 

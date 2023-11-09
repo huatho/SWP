@@ -94,12 +94,12 @@
                                 <p>Quản lý sản phẩm</p>
                             </a>
                         </li>
-                        <li>
-                            <a href="editAdmin?Accid=${sessionScope.account.id}">
+<!--                        <li>
+                            <a href="editAdmin?Accid={sessionScope.account.id}">
                                 <i class="fa fa-info" aria-hidden="true"></i>
                                 <p>Thông tin cá nhân</p>
                             </a>
-                        </li>
+                        </li>-->
                         <li>
                             <a href="logout">
                                 <i class="fa fa-sign-out" aria-hidden="true"></i>

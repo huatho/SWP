@@ -157,24 +157,6 @@ public class AdminDAO {
         return listC;
     }
 
-    public List<Customer> searchCus(String txtSearch) {
-        List<Customer> listC = new ArrayList<>();
-        String query = "Select CustomerID, CustomerName, Phone, CustomerAddress, Avatar, path, Customers.UserID,  ManageUsers.UserName, ManageUsers.Passwords, ManageUsers.email, ManageUsers.Roles\n"
-                + "from Customers, ManageUsers\n"
-                + "where ManageUsers.UserID = Customers.UserID and CustomerName like ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, "%" + txtSearch + "%");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listC.add(new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getString(6), rs.getInt(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getInt(11)));
-            }
-        } catch (Exception e) {
-        }
-        return listC;
-    }
 
     public List<Sellers> searchSell(String txtSearch) {
         List<Sellers> listS = new ArrayList<>();
@@ -195,24 +177,24 @@ public class AdminDAO {
         return listS;
     }
 
-    public Customer getCById(int id) {
-        String query = "Select CustomerID, CustomerName, Phone, CustomerAddress, Avatar, path,"
-                + "Customers.UserID,  ManageUsers.UserName, ManageUsers.Passwords, ManageUsers.email, ManageUsers.Roles\n"
-                + "from Customers, ManageUsers\n"
-                + "where ManageUsers.UserID = Customers.UserID and CustomerID = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, id);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
-                        rs.getString(5), rs.getString(6), rs.getInt(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getInt(11));
-            }
-        } catch (Exception e) {
-        }
-        return null;
-    }
+//    public Customer getCById(int id) {
+//        String query = "Select CustomerID, CustomerName, Phone, CustomerAddress, Avatar, path,"
+//                + "Customers.UserID,  ManageUsers.UserName, ManageUsers.Passwords, ManageUsers.email, ManageUsers.Roles\n"
+//                + "from Customers, ManageUsers\n"
+//                + "where ManageUsers.UserID = Customers.UserID and CustomerID = ?";
+//        try {
+//            conn = new DBContext().getConnection();
+//            ps = conn.prepareStatement(query);
+//            ps.setInt(1, id);
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                return new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+//                        rs.getString(5), rs.getString(6), rs.getInt(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getInt(11));
+//            }
+//        } catch (Exception e) {
+//        }
+//        return null;
+//    }
 
     public Sellers getSById(int id) {
         String query = "Select Sellers.SellerID, SellerName, Phone, SellerAddress, Avatar, path, Sellers.UserID, ManageUsers.UserName, ManageUsers.Passwords, ManageUsers.email, ManageUsers.Roles, LinkImage, StoreName, Descriptions\n"
@@ -233,21 +215,21 @@ public class AdminDAO {
         return null;
     }
 
-    public Store getStoreBySid(int id) {
-        String query = "Select SellerID, StoreID, StoreName, Descriptions, LinkImage\n"
-                + "from Store\n"
-                + "where SellerID = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, id);
-            while (rs.next()) {
-                return new Store(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5));
-            }
-        } catch (Exception e) {
-        }
-        return null;
-    }
+//    public Store getStoreBySid(int id) {
+//        String query = "Select SellerID, StoreID, StoreName, Descriptions, LinkImage\n"
+//                + "from Store\n"
+//                + "where SellerID = ?";
+//        try {
+//            conn = new DBContext().getConnection();
+//            ps = conn.prepareStatement(query);
+//            ps.setInt(1, id);
+//            while (rs.next()) {
+//                return new Store(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5));
+//            }
+//        } catch (Exception e) {
+//        }
+//        return null;
+//    }
 
     public void addSeller(String sellerName, String phone, String sellerAdd, String avatar, String path) {
         String query = "insert into Sellers values (?,?,?,?,?)";

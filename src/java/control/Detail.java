@@ -7,6 +7,7 @@ package control;
 
 import DAO.CategoryDAO;
 import DAO.DetailDAO;
+import DAO.OrdersDAO;
 import DAO.ProductDAO;
 import DAO.ReviewDAO;
 import entity.CardProduct;
@@ -60,14 +61,17 @@ public class Detail extends HttpServlet {
             throws ServletException, IOException {
         String ID  = request.getParameter("productID");
         String storeID = request.getParameter("storeID");
+        int productID = Integer.parseInt(ID);
         
         CategoryDAO categoryDAO = new CategoryDAO();
         ProductDAO productDAO = new ProductDAO();
         DetailDAO detailDAO = new DetailDAO();
+        OrdersDAO ordersDAO = new OrdersDAO();
         
-        int productID = Integer.parseInt(ID);
+        
         
         Product productDetail = productDAO.getProductByID(productID);
+        User u = (User) request.getSession().getAttribute("user");
         List<CardProduct> listProductSame = productDAO.getProductSame(productID);
         List<Category> listCategory = categoryDAO.getAllCategory();
 
@@ -81,6 +85,7 @@ public class Detail extends HttpServlet {
         request.setAttribute("countProduct", countProduct);
         request.setAttribute("detail", productDetail);
         request.setAttribute("storeID", storeID);
+        request.setAttribute("canComment", ordersDAO.isInOrders(u.getId(), productID));
         request.getRequestDispatcher("Detail.jsp").forward(request, response);
     }
 
@@ -95,12 +100,14 @@ public class Detail extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String ID  = request.getParameter("pid");
+        String storeID = request.getParameter("sid");
         String content = request.getParameter("content");
         int pid = Integer.parseInt(request.getParameter("pid"));
         ReviewDAO reviewDAO = new ReviewDAO();
         User user = (User) request.getSession().getAttribute("user");
         reviewDAO.addReview(pid, user.getId(), content);
-        response.sendRedirect("detail");
+        response.sendRedirect("detail?productID="+ID+"&storeID="+storeID);
     }
 
     /**

@@ -103,7 +103,7 @@ public class AddToCart extends HttpServlet {
                     }
 //                    int quan = c.getAmount() + quantity;
 //                    dao.updateCart(quan, c.getCartID());
-                    response.sendRedirect("home"); }
+                    response.sendRedirect("showCart"); }
 //                } else {
 //                    dao.insertCart(cid, st.getStoreId(), productId, size, color, quantity);
 //                    request.getRequestDispatcher("detail?productID=" + productId).forward(request, response);

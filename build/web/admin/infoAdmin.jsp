@@ -1,18 +1,21 @@
-<%-- 
-    Document   : infoAdmin
-    Created on : Nov 20, 2022, 10:39:35 AM
-    Author     : DELL
---%>
-
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
+<%@page import="entity.Count"%>
 <%@page import="entity.AdminProfile"%>
 <%@page import="DAO.AdminDAO"%>
 <%@page import="entity.Account"%>
+<%@page import="entity.AdminProfile"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Info Admin</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>
+            Quản lý người dùng  
+        </title>
         <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
               name='viewport' />
         <!--     Fonts and icons     -->
@@ -20,17 +23,21 @@
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
         <!-- CSS Files -->
         <link href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="${pageContext.request.contextPath}/assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet"/>
+        <link href="${pageContext.request.contextPath}/assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
         <!-- CSS Just for demo purpose, don't include it in your project -->
-        <link href="${pageContext.request.contextPath}/assets/css/admin.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/assets/css/admin.css" rel="stylesheet"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"/>
+        <link href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css"/>
         <style>
+            body {
+                margin-top: 0;
+                height: 100%;
+            }
             .card-stats .card-body .numbers p {
                 margin-bottom: 0;
                 font-size: 16px;
             }
-            .card-user .author {
-                margin-top: 0px;
-            }
+
             .sidebar[data-color="white"]:after {
                 background: black;
             }
@@ -47,22 +54,23 @@
             }
             .main-panel {
                 background-color: #41434429;
-                height: 100%;
             }
-            .card-user .author {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
+            .table-responsive {
+                overflow: hidden;
+            }
+            .row {
+                margin: 0;
             }
         </style>
     </head>
+
     <body>
         <div class="wrapper ">
             <div class="sidebar" data-color="white" data-active-color="danger">
                 <div class="logo">
 
                     <a href="editAdmin?Accid=${sessionScope.account.id}">
-                        Xin chào @${sessionScope.account.acc}
+                        Xin chào ${sessionScope.account.acc}
                         <!-- <div class="logo-image-big">
                 <img src="../assets/img/logo-big.png">
               </div> -->
@@ -82,6 +90,7 @@
                                 <p>Quản lý Người dùng</p>
                             </a>
                         </li>
+
                         <li>
                             <a href="${pageContext.request.contextPath}/listProduct">
                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -89,9 +98,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="editAdmin?Accid=${sessionScope.account.id}">
+                            <a href="editAdmin">
                                 <i class="fa fa-info" aria-hidden="true"></i>
-                                <p>Thông tin cá nhân</p>
+                                <p>Thông tin</p>
                             </a>
                         </li>
                         <li>
@@ -115,7 +124,7 @@
                                     <span class="navbar-toggler-bar bar3"></span>
                                 </button>
                             </div>
-                            <a class="navbar-brand" href="">Bảng điều khiển</a>
+                            <a class="navbar-brand" href="">Quản lý người dùng</a>
                         </div>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
                                 aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -156,103 +165,195 @@
                         </div>
                     </div>
                 </nav>
+                <!-- End Navbar -->
                 <div class="content">
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="card card-user">
-                                <div class="card-body">
-                                    <form action="adminUploadImg" method="post" enctype="multipart/form-data">
-                                        <div class="author">
-                                            <img class="avatar border-gray" src="${ad.avatar}" alt="" id="image">
-                                            <!--<label class="btn btn-primary" for="imageFile">Select file</label>-->
-                                            <input type="file" name="file" id="imageFile" onchange="chooseFile(this)"
-                                                   accept="image/gif, image/jpeg, image/png"/>
-                                            <input name="id" value="${ad.adminId}" hidden/>
-                                            <a href="#">
-                                                <h5 class="title">${ad.acc}</h5>
-                                            </a>
-
-                                            <p class="description text-center">
-                                                Email: ${ad.email}
-                                            </p>
-                                            <button type="submit">Update ảnh</button>
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="card card-stats">
+                                <div class="card-body ">
+                                    <div class="row">
+                                        <div class="col-5 col-md-4">
+                                            <div class="icon-big text-center">
+                                                <i class="fa fa-user" style="color: #6bd098"></i>
+                                            </div>
                                         </div>
-                                    </form>
-
+                                        <div class="col-7 col-md-8">
+                                            <div class="numbers">
+                                                <p class="card-category">Nguời dùng</p>
+                                                <p class="card-title"><%
+                                                    AdminDAO ad = new AdminDAO();
+                                                    Count c = new Count();
+                                                    c = ad.countUser();
+                                                    %>
+                                                    <%= c.getCount()%>
+                                                <p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-footer text-center">
+                                <div class="card-footer ">
                                     <hr>
-
-                                    <button class="btn btn-social btn-info btn-just-icon btn-round btn-facebook">
-                                        <i class="fa fa-facebook"> </i>
-                                    </button>
-                                    <button class="btn btn-social btn-info btn-just-icon btn-round btn-twitter">
-                                        <i class="fa fa-twitter"></i>
-                                    </button>
-                                    <button class="btn btn-social btn-info bbtn-just-icon btn-round btn-github">
-                                        <i class="fa fa-github"></i>
-                                    </button>
-                                    <button class="btn btn-social btn-info btn-just-icon btn-round btn-youtube">
-                                        <i class="fa fa-youtube"></i>
-                                    </button>
+                                    <i class="fa fa-refresh"></i>
+                                    Xem danh sách
                                 </div>
                             </div>
-
                         </div>
-                        <div class="col-md-8">
-                            <div class="card card-user">
-                                <div class="card-header">
-                                    <h5 class="card-title text-center">Chỉnh sửa thông tin cá nhân</h5>
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="card card-stats">
+                                <div class="card-body ">
+                                    <div class="row">
+                                        <div class="col-5 col-md-4">
+                                            <div class="icon-big text-center">
+                                                <i class="fa fa-money" style="color: #ef8157" aria-hidden="true"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-7 col-md-8">
+                                            <div class="numbers">
+                                                <p class="card-category">Doanh thu</p>
+                                                <%
+                                                    long total = ad.totalPrice();
+                                                    Locale localeVN = new Locale("vi", "VN");
+                                                    NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+                                                    String str1 = currencyVN.format(total);
+                                                %>
+                                                <p class="card-title"><%= str1%>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <form action="editAdmin" method="post">
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                <div class="form-group">
-                                                    <label>Tên</label>
-                                                    <input name="adminName" type="text" class="form-control" placeholder="Company"
-                                                           value="${ad.adminName}">
-                                                    <input name="adid" value="${ad.adminId}" hidden>
-                                                </div>
+                                <div class="card-footer ">
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-calendar-o"></i>
+                                        Xem doanh thu
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="card card-stats">
+                                <div class="card-body ">
+                                    <div class="row">
+                                        <div class="col-5 col-md-4">
+                                            <div class="icon-big text-center icon-warning">
+                                                <i class="fa fa-university" style="color: #ef8157   " aria-hidden="true"></i>
                                             </div>
                                         </div>
+                                        <div class="col-7 col-md-8">
+                                            <div class="numbers">
+                                                <p class="card-category">Cửa hàng</p>
+                                                <p class="card-title"><%
 
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                <div class="form-group">
-                                                    <label>Địa chỉ</label>
-                                                    <input name= "adminAddress" type="text" class="form-control" placeholder="Home Address"
-                                                           value="${ad.adminAddress}">
-                                                </div>
+                                                    c = ad.countStore();
+                                                    %>
+                                                    <%= c.getCount()%>
+                                                <p>
                                             </div>
                                         </div>
-
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                <div class="form-group">
-                                                    <label>Số điện thoại</label>
-                                                    <input name="adminPhone" type="text" class="form-control" placeholder="Home Address"
-                                                           value="${ad.adminPhone}">
-                                                </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer ">
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-clock-o"></i>
+                                        Xem danh sách
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="card card-stats">
+                                <div class="card-body ">
+                                    <div class="row">
+                                        <div class="col-5 col-md-4">
+                                            <div class="icon-big text-center icon-warning">
+                                                <i class="fa fa-product-hunt" style="color: #6bd098" aria-hidden="true"></i>
                                             </div>
                                         </div>
+                                        <div class="col-7 col-md-8">
+                                            <div class="numbers">
+                                                <p class="card-category">Sản phẩm</p>
+                                                <p class="card-title"><%
 
-
-                                        <div class="row">
-                                            <div class="update ml-auto mr-auto">
-                                                <button type="submit" class="btn btn-primary btn-round">Cập nhật thông
-                                                    tin</button>
+                                                    c = ad.countProduct();
+                                                    %>
+                                                    <%= c.getCount()%>
+                                                <p>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
+                                </div>
+                                <div class="card-footer ">
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-refresh"></i>
+                                        Xem sản phẩm
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card ">
+                               
+                                <div class="">
+                                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <!--<th>ID</th>-->
+                                                <th>UserName</th>	
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Tên</th>
+                                                <th>Địa chỉ</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach items="${listC}" var= "c">
+                                                <tr>
+                                                    <td>${c.acc}</td>
+                                                    <td>${c.email}</td>
+                                                    <c:if test="${c.roles == 3}">
+                                                        <td>Khách hàng</td>
+                                                    </c:if>
+                                                    <c:if test="${c.roles == 2}">
+                                                        <td>Người bán</td>
+                                                    </c:if>
+                                                    <td>${c.name}</td>
+                                                    <td>${c.address}</td>
+                                                    <td>
+                                                        <form method="POST" action="listU">
+                                                            <input hidden value="${c.id}" name="id"/>
+                                                            <c:if test="${c.lock==1}">
+                                                                <input hidden value="0" name="lock"/>
+                                                                <button class="btn btn-danger" type="submit">UNLOCK</button>
+                                                            </c:if>
+                                                            <c:if test="${c.lock==0}">
+                                                                <input hidden value="1" name="lock"/>
+                                                                <button class="btn btn-success" type="submit">LOCK</button>
+                                                            </c:if>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+
+                                            
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
         </div>
-
+        <!--   Core JS Files   -->
         <script src="${pageContext.request.contextPath}/assets/js/core/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/core/popper.min.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/core/bootstrap.min.js"></script>
@@ -267,18 +368,28 @@
         <script src="${pageContext.request.contextPath}/assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
         <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
         <script src="${pageContext.request.contextPath}/assets/js/admin.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-
         <script>
-                                                function chooseFile(fileInput) {
-                                                    if (fileInput.files && fileInput.files[0]) {
-                                                        var reader = new FileReader();
-                                                        reader.onload = function (e) {
-                                                            $('#image').attr('src', e.target.result);
-                                                        }
-                                                        reader.readAsDataURL(fileInput.files[0]);
-                                                    }
-                                                }
+            $(document).ready(function () {
+                // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
+                demo.initChartsPages();
+            });
         </script>
+        <script>
+            function showMess(id) {
+                var option = confirm('Bạn muốn XÓA tài khoản');
+                if (option === true) {
+                    window.location.href = 'deleteAccount?Accid=' + id;
+                }
+            }
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#example').DataTable();
+            });
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>        
+        <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
     </body>
+
 </html>

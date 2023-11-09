@@ -429,25 +429,6 @@ public class LoginDAO {
         return null;
     }
     
-    public Store checkStore(String id){
-        
-        String query = "select Store.StoreID, Store.SellerID, Store.StoreName, Store.Descriptions, Store.LinkImage from Store, Sellers , ManageUsers where Sellers.SellerID = Store.SellerID and Sellers.UserID = ManageUsers.UserID and UserName = ?";
-        try{
-            
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, id);
-            rs = ps.executeQuery();
-            
-            while(rs.next()){
-                Store a = new Store(rs.getInt(1), rs.getInt(2), rs.getString(3),rs.getString(4), rs.getString(5));
-                return a;
-            }
-        }catch(Exception e){
-            
-        }
-        return null;
-    }
     
     
     public void editProfileSel(String id, String name, String phone, String address) {

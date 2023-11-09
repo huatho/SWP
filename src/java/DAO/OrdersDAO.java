@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -150,27 +150,23 @@ public class OrdersDAO {
         }
     }
 
-    public List<Orders> searchByName(String txtSearch) {
-        List<Orders> list = new ArrayList<>();
-        String query = "select * from Orders\n"
-                + "where [PaymentWay] like ?";
+    public boolean isInOrders(int uID, int pID) {
+        boolean check = false;
+        String query = "  SELECT * \n" +
+"  FROM Orders_Detail as od INNER JOIN Orders as o ON od.orderID = o.orderID\n" +
+"  WHERE userID = ? AND productID = ? AND orderStatus = 3";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, "%" + txtSearch + "%");
+            ps.setInt(1, uID);
+            ps.setInt(2, pID);
             rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Orders(rs.getInt(1),
-                                    rs.getInt(2),
-                                    rs.getDate(3),
-                                    rs.getDate(4),
-                                    rs.getString(5),
-                                    rs.getString(6),
-                                    rs.getString(7)));
+                check = true;
             }
         } catch (Exception e) {
         }
-        return list;
+        return check;
 
     }
 
