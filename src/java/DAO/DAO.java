@@ -22,24 +22,24 @@ public class DAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public List<topsellP> getAllTopselling(String sellersid) {
-        List<topsellP> list = new ArrayList<>();
-        String query = "SELECT TOP 5 p.ProductName, p.Price,ca.Amount AS qty,ISNULL((ca.Amount * p.Price),0) AS priceP\n" +
-"                       FROM Orders AS o LEFT JOIN Cart AS ca ON o.CartID = ca.CartID JOIN Product AS p ON ca.ProductID = p.ProductID JOIN Store AS s ON ca.StoreID = s.StoreID LEFT JOIN Sellers AS sell ON s.SellerID = sell.SellerID\n" +
-"                			WHERE o.PaymentStatus = 3 AND sell.SellerID = '"+sellersid+"'\n" +
-"                			GROUP BY p.ProductName,p.Price,ca.Amount\n" +
-"                            ORDER BY qty DESC";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new topsellP(rs.getString(1), rs.getDouble(2),rs.getInt(3), rs.getDouble(4)));
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
+//    public List<topsellP> getAllTopselling(String sellersid) {
+//        List<topsellP> list = new ArrayList<>();
+//        String query = "SELECT TOP 5 p.ProductName, p.Price,ca.Amount AS qty,ISNULL((ca.Amount * p.Price),0) AS priceP\n" +
+//"                       FROM Orders AS o LEFT JOIN Cart AS ca ON o.CartID = ca.CartID JOIN Product AS p ON ca.ProductID = p.ProductID JOIN Store AS s ON ca.StoreID = s.StoreID LEFT JOIN Sellers AS sell ON s.SellerID = sell.SellerID\n" +
+//"                			WHERE o.PaymentStatus = 3 AND sell.SellerID = '"+sellersid+"'\n" +
+//"                			GROUP BY p.ProductName,p.Price,ca.Amount\n" +
+//"                            ORDER BY qty DESC";
+//        try {
+//            conn = new DBContext().getConnection();
+//            ps = conn.prepareStatement(query);
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                list.add(new topsellP(rs.getString(1), rs.getDouble(2),rs.getInt(3), rs.getDouble(4)));
+//            }
+//        } catch (Exception e) {
+//        }
+//        return list;
+//    }
 //    public List<topsellP> statisticalProductByDate(String dfrom, String dto) {
 //        List<topsellP> list = new ArrayList<>();
 //        String query = "SELECT p.ProductName,ca.Amount AS qty, ISNULL(SUM(ca.Amount * pd.Price),0) AS total\n"

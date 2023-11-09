@@ -35,12 +35,12 @@ public class TopSellingControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         DAO dao = new DAO();
-        String sid = request.getParameter("sid");
-        System.out.println(sid);
-        List<topsellP> list = dao.getAllTopselling(sid);
-        request.setAttribute("listTopSell", list);
-        request.getRequestDispatcher("TopSelling.jsp").forward(request, response);
+//         DAO dao = new DAO();
+//        String sid = request.getParameter("sid");
+//        System.out.println(sid);
+//        List<topsellP> list = dao.getAllTopselling(sid);
+//        request.setAttribute("listTopSell", list);
+//        request.getRequestDispatcher("TopSelling.jsp").forward(request, response);
         }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
