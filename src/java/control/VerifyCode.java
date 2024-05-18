@@ -71,7 +71,10 @@ public class VerifyCode extends HttpServlet {
                 UserDAO userdao = new UserDAO();
                 userdao.addUser(user);
                 session.invalidate();
-                response.sendRedirect("login.jsp");
+                request.setAttribute("message1", "Next step login");
+                request.setAttribute("message2", "Click to login");
+                request.setAttribute("link", "loginController");
+                request.getRequestDispatcher("success.jsp").forward(request, response);
             }else{
                 request.setAttribute("mes", "Incorrect verification code!");
                 request.getRequestDispatcher("verifyEmail.jsp").forward(request, response);

@@ -42,6 +42,9 @@ public class Order extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String[] listCheckout = (String[]) request.getSession().getAttribute("listCheckout");
+         if (listCheckout == null) {
+            listCheckout = new String[0]; // Khởi tạo listCheckout là một mảng rỗng
+        }
         User u = (User) request.getSession().getAttribute("user");
         DetailDAO detailDAO = new DetailDAO();
        
@@ -55,20 +58,41 @@ public class Order extends HttpServlet {
         detailDAO.insertOrder(u.getId(), address, payWay, phone, name, total);
         int orderID = detailDAO.getIdNewestOrder();
 //        String[] orid  = request.getParameterValues("orid");
-        for (String s: listCheckout) {
+//        for (String s: listCheckout) {
+//            int cid = Integer.parseInt(s);
+//            int storeID = cartDAO.getStoreID(cid);
+//            CartDetail cd = cartDAO.getCartDetail(cid);
+//            detailDAO.checkout(orderID, cd.getProductID(), cd.getAmount(), storeID);
+//            detailDAO.deleteCart(cid);
+//        }
+        
+        String onlinePay = request.getParameter("onlinepay");
+        if (onlinePay != null && onlinePay.equals("Online Payment")) {
+            response.sendRedirect("vnpay_pay.jsp");
+            for (String s: listCheckout) {
+                int cid = Integer.parseInt(s);
+                int storeID = cartDAO.getStoreID(cid);
+                CartDetail cd = cartDAO.getCartDetail(cid);
+                detailDAO.checkout(orderID, cd.getProductID(), cd.getAmount(), storeID);
+                detailDAO.deleteCart(cid);
+            }
+        } else {
+                    for (String s: listCheckout) {
             int cid = Integer.parseInt(s);
             int storeID = cartDAO.getStoreID(cid);
             CartDetail cd = cartDAO.getCartDetail(cid);
             detailDAO.checkout(orderID, cd.getProductID(), cd.getAmount(), storeID);
             detailDAO.deleteCart(cid);
         }
+            // Chuyển hướng đến trang chủ nếu không chọn thanh toán trực tuyến
+            response.sendRedirect("home");
+        }
 //        for(int i = 0; i < orid.length; i++) {
                 
                 
 //                System.out.println("order: " + orid[i] + address + payWay);
 //        }
-        response.sendRedirect("home");
-//            request.getRequestDispatcher("vnpay.jsp")
+                
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

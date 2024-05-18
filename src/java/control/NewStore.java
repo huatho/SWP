@@ -7,6 +7,7 @@ package control;
 
 import DAO.LoginDAO;
 import DAO.StoreDAO;
+import DAO.UserDAO;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -76,8 +77,12 @@ public class NewStore extends HttpServlet {
         User u = (User) session.getAttribute("user");
         StoreDAO dao = new StoreDAO();
         dao.create(name, address, u.getId());
-        session.setAttribute("mystore", dao.getByUserID(u.getId()));
-        response.sendRedirect("view-store");
+        UserDAO userDAO = new UserDAO();
+        userDAO.setUpRole(u.getId(), 1);
+        request.setAttribute("message1", "Please wait for approval");
+        request.setAttribute("message2", "Go to home");
+        request.setAttribute("link", "home");
+        request.getRequestDispatcher("success.jsp").forward(request, response);
     }
 
     /**

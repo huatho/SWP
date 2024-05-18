@@ -7,10 +7,10 @@ package vnpay;
 
 
 import com.google.gson.JsonObject;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -20,11 +20,12 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
+import javax.servlet.annotation.WebServlet;
 
 /**
  *
  * @author CTT VNPAY
- */
+ */@WebServlet("/vnpayrefund")
 public class vnpayRefund extends HttpServlet {
 
     @Override

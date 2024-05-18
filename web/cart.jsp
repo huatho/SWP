@@ -99,7 +99,7 @@ Author     : ADMIN
                                         </thead>
                                         <tbody>
                                         <c:set var="total" value="0"/>
-                                        <c:forEach items="${listC}" var="c">
+                                        <c:forEach items="${sessionScope.listC}" var="c">
                                             <c:set var="total" value="${total + c.total}"/>
                                             <tr>
 
@@ -130,12 +130,7 @@ Author     : ADMIN
                                         <td class="shoping__cart__total">
                                             <fmt:formatNumber value = "${c.total}" type = "currency"/>VNĐ
                                         </td>
-                                        <td class="shoping__cart__item__close">
-                                            <a href="deleteCart?dcid=${c.cartDetailID}" style="text-decoration: none;">
-                                                <span class="icon_close">
-                                                </span>
-                                            </a>
-                                        </td>
+                                        
                                         </tr>
                                     </c:forEach>
                                     </tbody>
@@ -148,8 +143,9 @@ Author     : ADMIN
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="shoping__cart__btns">
-                                <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                                <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
+                                <a href="home" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                                
+                                <a href="UpdateCart.jsp" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
                                     Upadate Cart</a>
                             </div>
                         </div>

@@ -13,79 +13,25 @@ public class Product {
     private int productID;//1
     private String productName;//2
     private String descriptions;//3
-    private String sex;//4
     private String imageLink;//5
     private int price;//6
     private int categoryID;//7
     private String categoryName;//8
-    private int totalProduct;
 //    ---------------------------------------
 
     public Product() {
     }
 
-    public Product(int productID, String productName, String descriptions, String sex, String imageLink, int price, int categoryID, String categoryName) {
+    public Product(int productID, String productName, String descriptions, String imageLink, int price, int categoryID, String categoryName) {
         this.productID = productID;
         this.productName = productName;
         this.descriptions = descriptions;
-        this.sex = sex;
         this.imageLink = imageLink;
         this.price = price;
         this.categoryID = categoryID;
         this.categoryName = categoryName;
     }
 
-    // 7
-    public Product(String productName, String descriptions, String sex, String imageLink, int price, int categoryID, String categoryName) {
-        this.productName = productName;
-        this.descriptions = descriptions;
-        this.sex = sex;
-        this.imageLink = imageLink;
-        this.price = price;
-        this.categoryID = categoryID;
-        this.categoryName = categoryName;
-    }
-
-    // 9
-    public Product(int productID, String productName, String descriptions, String sex, String imageLink, int price, int categoryID, String categoryName, int totalProduct) {
-        this.productID = productID;
-        this.productName = productName;
-        this.descriptions = descriptions;
-        this.sex = sex;
-        this.imageLink = imageLink;
-        this.price = price;
-        this.categoryID = categoryID;
-        this.categoryName = categoryName;
-        this.totalProduct = totalProduct;
-    }
-
-    // 7
-    public Product(int productID, String productName, String descriptions, String sex, String imageLink, int price, int categoryID) {
-        this.productID = productID;
-        this.productName = productName;
-        this.descriptions = descriptions;
-        this.sex = sex;
-        this.imageLink = imageLink;
-        this.price = price;
-        this.categoryID = categoryID;
-    }
-
-    // 8
-    public Product(int productID, String productName, String descriptions, String sex, String imageLink, int price, int categoryID, int totalProduct) {
-        this.productID = productID;
-        this.productName = productName;
-        this.descriptions = descriptions;
-        this.sex = sex;
-        this.imageLink = imageLink;
-        this.price = price;
-        this.categoryID = categoryID;
-        this.totalProduct = totalProduct;
-    }
-    
-    
-    
-    
-    
     
     
     
@@ -100,10 +46,6 @@ public class Product {
 
     public String getDescriptions() {
         return descriptions;
-    }
-
-    public String getSex() {
-        return sex;
     }
 
     public String getImageLink() {
@@ -122,9 +64,6 @@ public class Product {
         return categoryName;
     }
 
-    public int getTotalProduct() {
-        return totalProduct;
-    }
 
     
    

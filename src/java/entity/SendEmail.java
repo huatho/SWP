@@ -7,9 +7,13 @@ package entity;
 
 import java.util.Properties;
 import java.util.Random;
-import javax.mail.*;
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.Message.RecipientType;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -25,6 +29,8 @@ public class SendEmail {
     //send email to the user email
     public boolean sendEmail(Email email) {
         boolean test = false;
+                                
+
 
         String toEmail = email.getEmail();
         String code = email.getCode();
@@ -35,12 +41,20 @@ public class SendEmail {
 
             // your host email smtp server details
             Properties pr = new Properties();
+//            pr.put("mail.smtp.host", "smtp.gmail.com");
+//            pr.put("mail.smtp.port", "587");
+//            pr.put("mail.smtp.auth", "true");
+//            pr.put("mail.smtp.starttls.enable", "true");
+//            pr.put("mail.smtp.socketFactory.port", "587");
+//            pr.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             pr.put("mail.smtp.host", "smtp.gmail.com");
-            pr.put("mail.smtp.port", "587");
+            pr.put("mail.smtp.port", "465");
             pr.put("mail.smtp.auth", "true");
             pr.put("mail.smtp.starttls.enable", "true");
-            pr.put("mail.smtp.socketFactory.port", "587");
+            pr.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            pr.put("mail.smtp.socketFactory.port", "465");
             pr.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            
             
 
  
@@ -52,6 +66,8 @@ public class SendEmail {
                     return new PasswordAuthentication(fromEmail, password);
                 }
             });
+            
+                    
 
             //set email message details
             Message mess = new MimeMessage(session);
@@ -64,11 +80,12 @@ public class SendEmail {
             mess.setSubject("Verify Email");
             mess.setContent("This is verify code: "+code,"text/plain");
                         
-
+            System.out.println(fromEmail + " " + toEmail+ " " + code);
             Transport.send(mess);
             System.out.println("7777777777777777");
             
             test=true;
+            
             
         } catch (MessagingException e) {
             System.out.println(e);

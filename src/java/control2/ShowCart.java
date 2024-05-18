@@ -16,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -46,7 +47,8 @@ public class ShowCart extends HttpServlet {
             int cid = Integer.parseInt(request.getParameter("cid"));
             DetailDAO dao = new DetailDAO();
             List<Carts> cart = dao.showCart(cid, 3);
-            request.setAttribute("listC", cart);
+            HttpSession session = request.getSession();
+            session.setAttribute("listC", cart);
             request.getRequestDispatcher("cart.jsp").forward(request, response);
         }
     }

@@ -81,7 +81,7 @@ public class LoginController extends HttpServlet {
         if (u == null) {
             request.setAttribute("mess", "Wrong UserName or Password!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else if (u.getRoles() == 1) {
+        } else if (u.getRoles() == 0) {
             HttpSession session = request.getSession();
             session.setAttribute("user", u);
             response.sendRedirect("load");
@@ -92,7 +92,7 @@ public class LoginController extends HttpServlet {
                 Store s = storeDAO.getByUserID(u.getId());
                 session.setAttribute("mystore", s);
                 response.sendRedirect("home");
-        } else if (u.getRoles() == 3) {
+        } else if (u.getRoles() == 1) {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", u);             
                 response.sendRedirect("home");

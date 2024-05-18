@@ -54,7 +54,7 @@
     </head>
 
     <body class="">
-        <c:set var="product" value="${requestScope.PRODUCT}"/>
+        <c:set var="product" value="${PRODUCT}"/>
         <div class="wrapper ">
             <div class="sidebar" data-color="white" data-active-color="danger">
                 <div class="logo">
@@ -171,14 +171,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="row col-md-12">
-                                                    <div class="col-md-6">
-                                                        <label for="exampleFormControlSelect2">Số lượng</label>
-                                                        <input name="txtAmount" type="text" class="form-control" placeholder="" required />
-                                                    </div>
+                                                    
                                                     <div class="col-md-6">
                                                         <label for="exampleFormControlSelect1">Loại sản phẩm</label>
                                                         <select class="form-control search-slt" id="exampleFormControlSelect1" name="txtCategory">
-                                                            <c:forEach var="category" items="${sessionScope.LIST_CATEGORY}">
+                                                            <c:forEach var="category" items="${LIST_CATEGORY}">
                                                                 <option value="${category.categoryID}">${category.categoryName}</option>
                                                             </c:forEach>
                                                         </select>
@@ -250,14 +247,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="row col-md-12">
-                                                    <div class="col-md-6">
-                                                        <label for="exampleInputEmail1">Số lượng</label>
-                                                        <input name="txtAmount" type="text" class="form-control" value="${product.totalProduct}" placeholder="số lượng" required>
-                                                    </div>
+                                                    
                                                     <div class="col-md-6">
                                                         <label for="exampleInputEmail1">Loại sản phẩm</label>
                                                         <select class="form-control search-slt" id="exampleFormControlSelect1" name="txtCategory">
-                                                            <c:forEach var="category" items="${sessionScope.LIST_CATEGORY}">
+                                                            <c:forEach var="category" items="${LIST_CATEGORY}">
                                                                 <option value="${category.categoryID}" <c:if test="${product.categoryID == category.categoryID}">selected</c:if>>${category.categoryName}</option>
                                                             </c:forEach>
                                                         </select>

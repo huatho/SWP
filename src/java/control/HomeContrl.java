@@ -53,36 +53,16 @@ public class HomeContrl extends HttpServlet {
         }
         int index = Integer.parseInt(indexPage);
 
-        if (cateID == 4) {
-            String sex = "MAN";
-            int count = productDAO.getTotalProductBySex(sex);
-            int endPage = count / 8;
-            if (count % 8 != 0) {
+
+        int count = productDAO.getTotalProductByCategory(cateID);
+        int endPage = count / 8;
+        if (count % 8 != 0) {
                 endPage++;
-            }
-            List<Product> listProductBySex = productDAO.pagingProductBySex(sex, index);
-            request.setAttribute("listProductInPage", listProductBySex);
-            request.setAttribute("endPage", endPage); //danh sách trang
-        } else if (cateID == 5) {
-            String sex = "WOMEN";
-            int count = productDAO.getTotalProductBySex(sex);
-            int endPage = count / 8;
-            if (count % 8 != 0) {
-                endPage++;
-            }
-            List<entity.Product> listProductBySex = productDAO.pagingProductBySex(sex, index);
-            request.setAttribute("listProductInPage", listProductBySex);
-            request.setAttribute("endPage", endPage); //danh sách trang
-        } else {
-            int count = productDAO.getTotalProductByCategory(cateID);
-            int endPage = count / 8;
-            if (count % 8 != 0) {
-                endPage++;
-            }
-            List<CardProduct> listProduct = productDAO.pagingByCategory(index, cateID);
-            request.setAttribute("listProductInPage", listProduct);
-            request.setAttribute("endPage", endPage); //danh sách trang
         }
+        List<CardProduct> listProduct = productDAO.pagingByCategory(index, cateID);
+        request.setAttribute("listProductInPage", listProduct);
+        request.setAttribute("endPage", endPage); //danh sách trang
+        
 
         List<Category> listCategory = categoryDAO.getAllCategory();
         List<CardProduct> listTop = productDAO.getTopProduct();

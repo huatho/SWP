@@ -19,6 +19,7 @@ public class User {
     private String pass;
     private Email email;
     private int roles;
+    private int upRole;
     
     User(){}
 
@@ -90,6 +91,10 @@ public class User {
         return roles;
     }
 
+    public int getUpRole() {
+        return upRole;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -129,6 +134,12 @@ public class User {
     public void setRoles(int roles) {
         this.roles = roles;
     }
+
+    public void setUpRole(int upRole) {
+        this.upRole = upRole;
+    }
+    
+    
 
     @Override
     public String toString() {

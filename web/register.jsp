@@ -58,7 +58,7 @@
                             <a class="nav-link" href="home">Trang chủ <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="login">Trở lại</a>
+                            <a class="nav-link" href="loginController">Trở lại</a>
                         </li>
 
                     </ul>
@@ -82,7 +82,7 @@
                         <p class="text-danger" style=" font-size: 1.2em">${messe}</p>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mật khẩu</label>
-                            <input name="pass" type="password" class="form-control" id="exampleInputPassword1" placeholder="***">
+                            <input name="pass" type="password" class="form-control" id="exampleInputPassword1" placeholder="***" required>
                             <small id="passwordHelpInline" class="text-muted">
                                 Tối thiểu 6 ký tự.
                             </small>
@@ -90,32 +90,14 @@
                         <p class="text-danger" style=" font-size: 1.2em">${passWarning}</p>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Nhập lại mật khẩu</label>
-                            <input name="repass" type="password" class="form-control" id="exampleInputPassword1" placeholder="***">                   
+                            <input name="repass" type="password" class="form-control" id="exampleInputPassword1" placeholder="***" required>                   
                         </div>
                         <p class="text-danger" style=" font-size: 1.2em">${messages}</p>
                         <div class="form-group">
                             <label for="inputEmail4">Email</label>
-                            <input name="email" type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                            <input name="email" type="email" class="form-control" id="inputEmail4" placeholder="Email" required>
                         </div>
-                        <fieldset class="form-group">
-                            <div class="row">
-                                <legend class="col-form-label col-sm-2 pt-0">Bạn là :</legend>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="roles" id="gridRadios1" value="2">
-                                        <label class="form-check-label" for="gridRadios1">
-                                            Người Bán Hàng
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="roles" id="gridRadios2" value="3" checked>
-                                        <label class="form-check-label" for="gridRadios2">
-                                            Người Mua Hàng 
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
+                      
                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
                             <input type="checkbox" class="custom-control-input" id="customControlInline">
                             <label class="custom-control-label" for="customControlInline">Tôi đã đọc kỹ và chấp nhận <a href="#">điều khoản dịch vụ</a>.</label>

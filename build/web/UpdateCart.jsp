@@ -5,6 +5,7 @@ Author     : ADMIN
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -69,17 +70,12 @@ Author     : ADMIN
 
             <!-- Hero Section Begin -->
         <jsp:include page="category.jsp"></jsp:include>
-            <!-- Hero Section End -->
-
-            <!-- Breadcrumb Section Begin -->
-            
             <!-- Breadcrumb Section End -->
-            <form action="updateCart" method="post">
+            <form action="update-cart" method="post">
                 <!-- Shoping Cart Section Begin -->
                 <section class="shoping-cart spad">
 
                     <div class="container">
-
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="shoping__cart__table">
@@ -87,58 +83,75 @@ Author     : ADMIN
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th class="shoping__product">Sản phẩm</th>
+                                                <th style="display : flex; flex-direction : row">
+                                                    <input type="checkbox" class="check" id="checkAll">
+                                                    <label>
+                                                        Chọn tất cả
+                                                    </label>
+                                                </th>
+                                                <th  class="shoping__product" style="text-align: center; ">Sản phẩm</th>
+                                                <th>Shop ID</th>
                                                 <th>Giá</th>
                                                 <th>Số lượng</th>
-                                               
-                                                <th>Tổng</th>
-                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        <c:set var="total" value="0"/>
+                                        <c:forEach items="${sessionScope.listC}" var="c">
+                                            <c:set var="total" value="${total + c.total}"/>
                                             <tr>
-                                                <td class="shoping__cart__item">
-                                                    <img src="${ct.imgLink}" alt="">
-                                                <h5>${ct.productName}</h5>
-                                            </td>
-                                            <td class="shoping__cart__price">
-                                                $${ct.price}
-                                            </td>
-                                            <td class="shoping__cart__quantity">
-                                                <div class="quantity">
-                                                    <div class="buttons_added" style="padding-top: 16px;">
-                                                        <!--<input class="minus is-form" type="button" value="-">-->
-                                                        <input name="amount" aria-label="quantity" class="input-qty" max="100" min="1" name="" type="number" value="${ct.amount}">
-                                                        <!--<input class="plus is-form" type="button" value="+">-->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            
-                                    <input name="csID" value="${sessionScope.user.id}" hidden>
-                                   
 
-                                    <td class="shoping__cart__total">
-                                        $${ct.total}
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                    </tr>
+                                                <td><label>
+                                                        <input type="checkbox" name="cbid" value="${c.cartDetailID}" class="check">
+                                                    </label>
+                                                </td>
+                                                <td class="shoping__cart__item">
+                                                    <img src="${c.imgLink}" alt="">
+                                                    <h5 style="margin-left: 50px">${c.productName}</h5>
+                                                </td>
+                                                <td class="shoping__cart__quantity">
+                                                    ${c.storeID}
+                                                </td>
+                                                <td class="shoping__cart__price">
+                                                    <fmt:formatNumber value = "${c.price}" type = "currency"/>VNĐ
+                                                </td>
+                                                <td class="shoping__cart__quantity">
+                                                    <input name="amount"  />
+                                                </td>
+<!--                                                <td>
+                                                    <button type="button">
+                                                        <a href="updateCart?cid={c.cartID}" style="text-decoration: none; color: black;">
+                                                            {c.size} - {c.color}
+                                                        </a>
+                                                    </button>
+                                                </td>-->
+                                       
+                                        <td class="shoping__cart__item__close">
+                                            <a href="deleteCart?dcid=${c.cartDetailID}" style="text-decoration: none;">
+                                                <span class="icon_close">
+                                                </span>
+                                            </a>
+                                        </td>
+                                        </tr>
+                                    </c:forEach>
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <input name="cid" value="${ct.cartID}" hidden>
                         <div class="col-lg-12">
                             <div class="shoping__cart__btns">
-                                <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                                <button class="primary-btn">Upadate Cart</button>
+                                <a href="home" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                                
+                                <button type="submit" class="primary-btn cart-btn cart-btn-right">
+                                    Upadate</button>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+
+<!--                        <div class="col-lg-6">
                             <div class="shoping__continue">
                                 <div class="shoping__discount">
                                     <h5>Discount Codes</h5>
@@ -148,19 +161,12 @@ Author     : ADMIN
 
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="shoping__checkout">
-                                <h5>Cart Total</h5>
-                                <ul>
-                                    <li>Subtotal <span>$454.98</span></li>
-                                    <li>Total <span>$454.98</span></li>
-                                </ul>
-                                <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
-                            </div>
-                        </div>
+                        
+
                     </div>
                 </div>
+
+
             </section>
             <!-- Shoping Cart Section End -->
         </form>
@@ -241,6 +247,8 @@ Author     : ADMIN
             $("#checkAll").click(function () {
                 $(".check").prop('checked', $(this).prop('checked'));
             });
+            
+            
 
 
             document.getElementById("getChecked").addEventListener("click", function () {
@@ -251,6 +259,8 @@ Author     : ADMIN
                 console.clear();
                 console.log(checkedRadio.value);
             });
+            
+            
         </script>
     </body>
 

@@ -1,5 +1,3 @@
-<%@page import="java.text.DecimalFormat"%>
-<%@page import="entity.Product"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="java.util.Locale"%>
 <%@page import="entity.Count"%>
@@ -16,7 +14,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>
-            Quản lý Sản Phẩm 
+            Quản lý người dùng  
         </title>
         <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
               name='viewport' />
@@ -63,13 +61,6 @@
             .row {
                 margin: 0;
             }
-            .table > thead > tr > th,
-            .table > tbody > tr > td {
-                text-align: center;
-            }
-            .table > tbody > tr > td a {
-                font-size: 20px;
-            }
         </style>
     </head>
 
@@ -99,18 +90,19 @@
                                 <p>Quản lý Người dùng</p>
                             </a>
                         </li>
+
                         <li>
                             <a href="${pageContext.request.contextPath}/listProduct">
                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                <p>Quản lý sản phẩm</p>
+                                <p>Duyệt người bán</p>
                             </a>
                         </li>
-<!--                        <li>
-                            <a href="editAdmin?Accid={sessionScope.account.id}">
+                        <li>
+                            <a href="/Mooc/TopSellingControl">
                                 <i class="fa fa-info" aria-hidden="true"></i>
-                                <p>Thông tin</p>
+                                <p>Doanh số</p>
                             </a>
-                        </li>-->
+                        </li>
                         <li>
                             <a href="logout">
                                 <i class="fa fa-sign-out" aria-hidden="true"></i>
@@ -132,7 +124,7 @@
                                     <span class="navbar-toggler-bar bar3"></span>
                                 </button>
                             </div>
-                            <a class="navbar-brand" href="">Quản lý sản phẩm</a>
+                            <a class="navbar-brand" href="">Quản lý người dùng</a>
                         </div>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
                                 aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -302,101 +294,66 @@
                             </div>
                         </div>
                     </div>
-                    <button style="margin-left: 16px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
-                        Thêm Loại Sản Phẩm
-                    </button>
-                    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Thêm loại sản phẩm</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <form action="addCategory" method="POST">
-                                    <div class="modal-body">
-                                        <% int num = ad.lastCategoryId();
-                                                int num1 = num + 1;%>
-                                        <label>ID:</label>
-                                        <input type="text" name="categoryID" class="form-control" placeholder="ID" aria-label="ID" value="<%= num1%>" readonly="">
-                                        <label>Tên loại Sản Phẩm:</label>
-                                        <input type="text" name="categoryName" class="form-control" placeholder="Tên loại Sản Phẩm">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Thêm</button>
-                                    </div>
-                                </form>
-
-                            </div>
-                        </div>
-                    </div>               
-                    <div class="row">                        
+                    <div class="row">
                         <div class="col-md-12">
                             <div class="card ">
+                               
                                 <div class="">
                                     <table id="example" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Tên sản phẩm</th>
-                                                <th>Ảnh</th>
-                                                <th>Giá</th>
-                                                <th>Loại</th>
-                                                <th>Tên Shop</th>
-                                                <th>Tình trạng</th>
-                                                <th>Duyệt</th>
+                                                <!--<th>ID</th>-->
+                                                <th>UserName</th>	
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Tên</th>
+                                                <th>Địa chỉ</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
-
                                         <tbody>
-                                            <c:forEach items="${listP}" var= "p">
+                                            <c:forEach items="${listC}" var= "c">
                                                 <tr>
-                                                    <td>${p.productName}</td>
-                                                    <td><img src="${p.imageLink}" style="width: 200px; height: 200px; object-fit: contain;"/></td>
-                                                    <td>${p.getPriceWithDot()}đ</td>
-                                                    <td>${p.categoryName}</td>
-                                                    <td>${p.storeName}</td>
-                                                    <c:choose>
-                                                        <c:when test="${p.totalProduct > 0}">
-                                                            <td style="color: green; font-weight: 600;">Còn hàng</td>
-                                                        </c:when>    
-                                                        <c:otherwise>
-                                                            <td style="color: red; font-weight: 600;">Hết Hàng</td> 
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                            <td>
-                                                                <form method="POST" action="listProduct">
-                                                                    <c:if test="${p.accept==1}">
-                                                                        <select name="accept">
-                                                                            <option value="1" selected>Yes</option>
-                                                                            <option value="0">No</option>
-                                                                        </select>
-                                                                    </c:if>
-                                                                    <c:if test="${p.accept==0}">
-                                                                        <select name="accept">
-                                                                            <option value="1">Yes</option>
-                                                                            <option value="0" selected>No</option>
-                                                                        </select>
-                                                                    </c:if>
-                                                                    <br>
-                                                                    <input hidden value="${p.productID}" name="productID"/>
-                                                                    <button type="submit" class="btn btn-success">Save</button> 
-                                                                </form>
-                                                            </td>
+                                                    <td>${c.acc}</td>
+                                                    <td>${c.email}</td>
+                                                    <c:if test="${c.roles == 1}">
+                                                        <td>Khách hàng</td>
+                                                    </c:if>
+                                                    <c:if test="${c.roles == 2}">
+                                                        <td>Người bán</td>
+                                                    </c:if>
+                                                    <td>${c.name}</td>
+                                                    <td>${c.address}</td>
+                                                    <td>
+                                                        <form method="POST" action="listProduct">
+                                                            <input hidden value="${c.id}" name="id"/>
+                                                            <c:if test="${c.roles==2}">
+                                                                <input hidden value="0"/>
+                                                                <button class="btn btn-danger" type="submit">UNLOCK</button>
+                                                            </c:if>
+                                                            <c:if test="${c.roles==1}">
+                                                                <input hidden value="1"/>
+                                                                <button class="btn btn-success" type="submit">ACCEPT</button>
+                                                            </c:if>
+                                                        </form>
+                                                    </td>
                                                 </tr>
                                             </c:forEach>
+
+                                            
                                         </tbody>
-                                    </table> 
+
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
-
-
+        <!--   Core JS Files   -->
         <script src="${pageContext.request.contextPath}/assets/js/core/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/core/popper.min.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/core/bootstrap.min.js"></script>
@@ -429,9 +386,10 @@
             $(document).ready(function () {
                 $('#example').DataTable();
             });
-        </script>     
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>        
         <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
-
     </body>
+
 </html>

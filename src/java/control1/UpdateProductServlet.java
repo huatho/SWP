@@ -1,5 +1,6 @@
 package control1;
 
+import DAO.CategoryDAO;
 import DAO.ProductDAO;
 import DAO.StoreDAO;
 import entity.Product;
@@ -41,9 +42,8 @@ public class UpdateProductServlet extends HttpServlet {
             int productID = Integer.parseInt(request.getParameter("txtProductID"));
             String productName = request.getParameter("txtProductName");
             String descriptions = request.getParameter("txtDescription");
-            String amount = request.getParameter("txtAmount");
             int price = Integer.parseInt(request.getParameter("txtPrice"));
-            String categoryID = request.getParameter("txtCategory");
+            int categoryID = Integer.parseInt(request.getParameter("txtCategory"));
             Part filePart = request.getPart("txtImageLink");
             String image;
             if (getFileName(filePart).equals("")) {
@@ -53,13 +53,13 @@ public class UpdateProductServlet extends HttpServlet {
                 filePart.write(imageLink);
                 image = "images" + File.separator + getFileName(filePart);
             }
-
-            Product product = new Product(productID, productName, descriptions, "", image, price, Integer.parseInt(categoryID), Integer.parseInt(amount));
+            CategoryDAO cateDAO = new CategoryDAO();
+            String cateName = cateDAO.getCateNameByID(categoryID);
+            Product product = new Product(productID, productName, descriptions, image, price, categoryID, cateName);
             boolean result = productDAO.updateProduct(product);
-            storeDAO.updateAmount(store.getStoreID(), product.getProductID(), Integer.parseInt(amount));
             if (result) {
                 List<Product> listProduct = storeDAO.getAllProduct(store.getStoreID());
-                session.setAttribute("LIST_PRODUCT", listProduct);
+                request.setAttribute("LIST_PRODUCT", listProduct);
                 url = SUCCESS;
             }
         } catch (NumberFormatException ex) {

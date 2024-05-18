@@ -6,7 +6,9 @@
 package control;
 
 import DAO.AdminDAO;
+import entity.Account;
 import entity.CardProduct;
+import entity.Customer;
 import entity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,8 +35,8 @@ public class listP extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         AdminDAO dao = new AdminDAO();
-        List<CardProduct> listP = dao.getListProduct();
-        request.setAttribute("listP", listP);
+        List<Customer> listA = dao.getRequest();
+        request.setAttribute("listC", listA);
         request.getRequestDispatcher("admin/listP.jsp").forward(request, response);
     }
 
@@ -42,11 +44,10 @@ public class listP extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int accept = Integer.parseInt(request.getParameter("accept"));
-        int productID = Integer.parseInt(request.getParameter("productID"));
+        int userID = Integer.parseInt(request.getParameter("id"));
         AdminDAO dao = new AdminDAO();
-        dao.acceptProduct(productID, accept);
-        response.sendRedirect("listProduct");
+        dao.acceptSeller(userID);
+        request.getRequestDispatcher("admin/listP.jsp").forward(request, response);
     }
 
 

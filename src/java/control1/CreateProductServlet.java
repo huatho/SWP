@@ -3,6 +3,7 @@ package control1;
 import DAO.CategoryDAO;
 import DAO.ProductDAO;
 import DAO.StoreDAO;
+import entity.Category;
 import entity.Product;
 import entity.Store;
 import java.io.File;
@@ -25,48 +26,17 @@ import jakarta.servlet.http.Part;
 )
 @WebServlet(name = "CreateProductServlet", urlPatterns = {"/create-product"})
 public class CreateProductServlet extends HttpServlet {
-
+    
     private final String ERROR = "create-update-product.jsp";
     private final String SUCCESS = "seller-dashboard.jsp";
+    ProductDAO productDAO = new ProductDAO();
+    StoreDAO storeDAO = new StoreDAO();
+    CategoryDAO cateDAO = new CategoryDAO();
+    
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
-        try {
-            HttpSession session = request.getSession();
-
-            String productName = request.getParameter("txtProductName");
-            String descriptions = request.getParameter("txtDescription");
-            String amount = request.getParameter("txtAmount");
-            int price = Integer.parseInt(request.getParameter("txtPrice"));
-            String categoryID = request.getParameter("txtCategory");
-            Part filePart = request.getPart("txtImageLink");
-            String imageLink = uploadFile() + File.separator + getFileName(filePart);
-            filePart.write(imageLink);
-            
-            Store st = (Store) session.getAttribute("mystore");
-            CategoryDAO cateDAO = new CategoryDAO();
-            ProductDAO productDAO = new ProductDAO();
-            StoreDAO storeDAO = new StoreDAO();
-            
-            String cateName = cateDAO.getCateNameByID(Integer.parseInt(categoryID));
-            Product product = new Product(productName, descriptions, "", "images" + File.separator + getFileName(filePart), price, Integer.parseInt(categoryID), cateName);
-            Product newProduct = productDAO.createProduct(product);
-            if (newProduct != null) {
-                storeDAO.addProductToStore(st.getStoreID(), newProduct.getProductID(), Integer.parseInt(amount));
-                List<Product> listProduct = storeDAO.getAllProduct(st.getStoreID());
-                session.setAttribute("LIST_PRODUCT", listProduct);
-                url = SUCCESS;
-            }
-            
-            
-      
-        } catch (Exception ex) {
-            ex.getMessage();
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
-        }
+        
     }
 
     private String uploadFile() {
@@ -100,7 +70,13 @@ public class CreateProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        Store st = (Store) session.getAttribute("mystore");
+        List<Product> listProduct = storeDAO.getAllProduct(st.getStoreID());
+        List<Category> listCate = cateDAO.getAllCategory();
+        request.setAttribute("LIST_CATEGORY", listCate);
+        request.setAttribute("LIST_PRODUCT", listProduct);
+        request.getRequestDispatcher("create-update-product.jsp").forward(request, response);
     }
 
     /**
@@ -114,7 +90,43 @@ public class CreateProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        String url = ERROR;
+        try {
+            
+
+            String productName = request.getParameter("txtProductName");
+            String descriptions = request.getParameter("txtDescription");
+            int price = Integer.parseInt(request.getParameter("txtPrice"));
+            String categoryID = request.getParameter("txtCategory");
+            Part filePart = request.getPart("txtImageLink");
+            String imageLink = uploadFile() + File.separator + getFileName(filePart);
+            filePart.write(imageLink);
+            
+            
+            HttpSession session = request.getSession();
+            Store st = (Store) session.getAttribute("mystore");
+            
+            
+            String cateName = cateDAO.getCateNameByID(Integer.parseInt(categoryID));
+            Product product = new Product(0, productName, descriptions, "images" + File.separator + getFileName(filePart), price, Integer.parseInt(categoryID), cateName);
+            Product newProduct = productDAO.createProduct(product);
+            if (newProduct != null) {
+                storeDAO.addProductToStore(st.getStoreID(), newProduct.getProductID());
+                List<Product> listProduct = storeDAO.getAllProduct(st.getStoreID());
+                List<Category> listCate = cateDAO.getAllCategory();
+                request.setAttribute("LIST_CATEGORY", listCate);
+                request.setAttribute("LIST_PRODUCT", listProduct);
+                url = SUCCESS;
+            }
+            
+            
+      
+        } catch (Exception ex) {
+            ex.getMessage();
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
+        }
     }
 
     /**

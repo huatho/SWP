@@ -41,7 +41,7 @@ public class AdminDAO {
     public List<Account> getAllAccounts() {
 
         List<Account> list = new ArrayList<>();
-        String query = "select userID, userName, pass, email, roleID from Users where roleID != 1";
+        String query = "select userID, userName, pass, email, roleID from Users where roleID != 0";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -54,6 +54,24 @@ public class AdminDAO {
         } catch (Exception e) {
         }
         return list;
+    }
+    
+        public List<Customer> getRequest() {
+        List<Customer> listC = new ArrayList<>();
+        String query = " Select userID, fullName, phone, userAddress, userName, pass, email, roleID, lock\n" +
+"from Users\n" +
+"WHERE roleID != 0 AND upRole = 1";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listC.add(new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getString(6), rs.getString(7), rs.getInt(8), rs.getInt(9)));
+            }
+        } catch (Exception e) {
+        }
+        return listC;
     }
 
     public Count countUser() {
@@ -143,7 +161,7 @@ public class AdminDAO {
         List<Customer> listC = new ArrayList<>();
         String query = " Select userID, fullName, phone, userAddress, userName, pass, email, roleID, lock\n" +
 "from Users\n" +
-"WHERE roleID != 1";
+"WHERE roleID != 0";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -275,33 +293,33 @@ public class AdminDAO {
         }
     }
 
-    public List<CardProduct> getListProduct() {
-        List<CardProduct> listP = new ArrayList<>();
-        String query = "select p.productID, p.productName, p.imageLink, p.price, c.categoryName, s.storeName, sd.amount as totalProduct, p.accept\n" +
-"                from Products as p\n" +
-"				inner join Store_Detail as sd on sd.productID = p.productID\n" +
-"                inner join Stores as s on (sd.storeID = s.storeID)\n" +
-"                inner join Category as c on (p.CategoryID = c.CategoryID)";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listP.add(new CardProduct(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getInt(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getInt(7),
-                        rs.getInt(8)
-                        ));
-            }
-        } catch (Exception e) {
-        }
-        return listP;
-        
-    }
+//    public List<CardProduct> getListProduct() {
+//        List<CardProduct> listP = new ArrayList<>();
+//        String query = "select p.productID, p.productName, p.imageLink, p.price, c.categoryName, s.storeName, sd.amount as totalProduct, p.accept\n" +
+//"                from Products as p\n" +
+//"				inner join Store_Detail as sd on sd.productID = p.productID\n" +
+//"                inner join Stores as s on (sd.storeID = s.storeID)\n" +
+//"                inner join Category as c on (p.CategoryID = c.CategoryID)";
+//        try {
+//            conn = new DBContext().getConnection();
+//            ps = conn.prepareStatement(query);
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                listP.add(new CardProduct(rs.getInt(1),
+//                        rs.getString(2),
+//                        rs.getString(3),
+//                        rs.getInt(4),
+//                        rs.getString(5),
+//                        rs.getString(6),
+//                        rs.getInt(7),
+//                        rs.getInt(8)
+//                        ));
+//            }
+//        } catch (Exception e) {
+//        }
+//        return listP;
+//        
+//    }
 
     public void addCategory(String categoryID, String categoryName) {
         String query = "Insert into Category values (?, ?)";
@@ -315,13 +333,12 @@ public class AdminDAO {
         }
     }
     
-    public void acceptProduct(int pid, int accept) {
-        String query = "UPDATE Products SET accept = ? WHERE productID = ?";
+    public void acceptSeller(int id) {
+        String query = "UPDATE Users SET roleID = 2, upRole = 0 WHERE userID = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setInt(1, accept);
-            ps.setInt(2, pid);
+            ps.setInt(1, id);
             ps.executeUpdate();
         } catch (Exception e) {
         }
@@ -337,6 +354,55 @@ public class AdminDAO {
             ps.executeUpdate();
         } catch (Exception e) {
         }
+    }
+    
+    public int getNumberOfOrders() {
+        String query = "SELECT COUNT(*) FROM Orders\n" +
+"  GROUP BY deliveryDate";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+    
+    public int getNumberOfSuccess() {
+        String query = "SELECT COUNT(*) FROM Orders as o\n" +
+"  INNER JOIN Orders_Detail as od ON o.orderID = od.orderID\n" +
+"  WHERE orderStatus = 3\n" +
+"  GROUP BY orderStatus";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+    
+    public int getTotalMoney() {
+        String query = "SELECT SUM(total) FROM Orders as o\n" +
+"  INNER JOIN Orders_Detail as od ON o.orderID = od.orderID\n" +
+"  WHERE orderStatus = 3\n" +
+"  GROUP BY orderStatus";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
     }
     
 

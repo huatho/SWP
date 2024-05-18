@@ -112,11 +112,7 @@
                                         <img class="product__details__pic__item--large"
                                              src="${detail.imageLink}" alt="">
                                 </div>
-                                <div class="product__details__pic__slider owl-carousel">
-                                    <c:forEach items="${listColor}" var="o">
-                                        <img src="${o.linkImageColor}" alt="">
-                                    </c:forEach>
-                                </div>
+
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6">
@@ -145,7 +141,6 @@
 <!--                                            <li><b>Tình trạng</b> <span>Còn {detail.totalProduct} sản phẩm</span></li>-->
                                             <li><b>Giao hàng</b> <span>Từ 02 - 03 ngày. <samp>Miễn phí giao hàng</samp></span></li>
                                             <li><b>Trọng lượng</b> <span>0.5 kg</span></li>
-                                            <li><b>Sản phẩm còn lại</b> <span>${countProduct}</span></li>
                                             <li><b>Chia sẻ</b>
                                                 <div class="share">
                                                     <a href="#"><i class="fa fa-facebook"></i></a>
@@ -164,7 +159,7 @@
                                     <div class="quantity">
                                         <div class="buttons_added" style="padding-top: 16px;">
                                             <input class="minus is-form" type="button" value="-">
-                                            <input name="quantity" aria-label="quantity" class="input-qty" max=${countProduct} min="1" type="number" value="1">
+                                            <input name="quantity" aria-label="quantity" class="input-qty" min="1" max="100" type="number" value="1">
                                             <input class="plus is-form" type="button" value="+">
                                         </div>
                                     </div>

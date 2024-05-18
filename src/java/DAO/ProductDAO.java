@@ -29,12 +29,15 @@ public class ProductDAO {
         String query = "SELECT top 1 * FROM Products\n" +
 "ORDER BY productID DESC";
         Product p = null;
+        CategoryDAO dao = new CategoryDAO();
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
-                p = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getInt(7));
+                
+                int cateID = rs.getInt(6);
+                p = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), cateID, dao.getCateNameByID(cateID));
             }
         } catch (Exception e) {
         }
@@ -43,11 +46,11 @@ public class ProductDAO {
 
     public List<CardProduct> getTopProduct() {
         List<CardProduct> listTop = new ArrayList<>();
-        String query = "SELECT TOP 6 p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName\n" +
+        String query = "SELECT TOP 6 p.productID, p.productName, p.descriptions, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName\n" +
 "FROM Store_Detail as sd INNER JOIN Products as p ON sd.productID = p.productID\n" +
 "INNER JOIN Stores as s ON sd.storeID = s.storeID\n" +
-"INNER JOIN Category as c ON p.categoryID = c.categoryID "
-                + "WHERE p.accept = 1 ORDER BY productID DESC";
+"INNER JOIN Category as c ON p.categoryID = c.categoryID \n" +
+"      ORDER BY productID DESC";
               
         try {
             conn = new DBContext().getConnection();
@@ -58,13 +61,13 @@ public class ProductDAO {
                         rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
+                      
                         rs.getString(4),
-                        rs.getString(5),
+                        rs.getInt(5),
                         rs.getInt(6),
-                        rs.getInt(7),
-                        rs.getString(8),
-                        rs.getInt(9),
-                        rs.getString(10)
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getString(9)
                        );
                 listTop.add(p);
             }
@@ -90,11 +93,11 @@ public class ProductDAO {
 
     public List<CardProduct> pagingProduct(int index) {
         List<CardProduct> listProductInPage = new ArrayList<>();
-        String query = "SELECT p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName, sd.amount\n" +
+        String query = "SELECT p.productID, p.productName, p.descriptions, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName\n" +
 "FROM Store_Detail as sd INNER JOIN Products as p ON sd.productID = p.productID\n" +
 "INNER JOIN Stores as s ON sd.storeID = s.storeID\n" +
 "INNER JOIN Category as c ON p.categoryID = c.categoryID\n"
-                + "WHERE p.accept = 1" +
+              +
 "ORDER BY productID\n" +
 "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
         try {
@@ -108,13 +111,12 @@ public class ProductDAO {
                             rs.getString(2),
                             rs.getString(3),
                             rs.getString(4),
-                            rs.getString(5),
+                           
+                            rs.getInt(5),
                             rs.getInt(6),
-                            rs.getInt(7),
-                            rs.getString(8),
-                            rs.getInt(9),
-                            rs.getString(10),
-                            rs.getInt(11)
+                            rs.getString(7),
+                            rs.getInt(8),
+                            rs.getString(9)
                 );
                 listProductInPage.add(p);
             }
@@ -182,14 +184,14 @@ public class ProductDAO {
 
     public List<Product> pagingProductBySex(String sex, int index) {
         List<Product> listProductInPage = new ArrayList<>();
-        String query = "select p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, sum(pd.CountProduct) as totalProduct\n"
-                + "from Products as p\n"
-                + "left outer join Product_Detail as pd on (p.productID = pd.productID)\n"
-                + "left outer join Category as c on (p.categoryID = c.categoryID)\n"
-                + "WHERE sex like ?\n"
-                + "group by p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName\n"
-                + "ORDER BY productID\n"
-                + "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
+        String query = " select p.productID, p.productName, p.descriptions, p.imageLink, p.price, p.categoryID, c.categoryName\n" +
+"                from Products as p\n" +
+"              \n" +
+"                left outer join Category as c on (p.categoryID = c.categoryID)\n" +
+"                \n" +
+"                group by p.productID, p.productName, p.descriptions, p.imageLink, p.price, p.categoryID, c.categoryName\n" +
+"                ORDER BY productID\n" +
+"                OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -201,11 +203,9 @@ public class ProductDAO {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
-                        rs.getString(5),
+                        rs.getInt(5),
                         rs.getInt(6),
-                        rs.getInt(7),
-                        rs.getString(8),
-                        rs.getInt(9)
+                        rs.getString(7)
                        );
                 listProductInPage.add(p);
             }
@@ -233,11 +233,11 @@ public class ProductDAO {
 
     public List<CardProduct> pagingProductBySearch(String txtSearch, int index) {
         List<CardProduct> listProductInPage = new ArrayList<>();
-        String query = "SELECT p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName, sd.amount\n" +
+        String query = "SELECT p.productID, p.productName, p.descriptions, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName\n" +
 "FROM Store_Detail as sd INNER JOIN Products as p ON sd.productID = p.productID\n" +
 "INNER JOIN Stores as s ON sd.storeID = s.storeID\n" +
 "INNER JOIN Category as c ON p.categoryID = c.categoryID\n" +
-"WHERE p.productName like ? AND p.accept = 1\n" +
+"WHERE p.productName like ? \n" +
 "ORDER BY productID\n" +
 "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
         try {
@@ -252,13 +252,11 @@ public class ProductDAO {
                             rs.getString(2),
                             rs.getString(3),
                             rs.getString(4),
-                            rs.getString(5),
+                            rs.getInt(5),
                             rs.getInt(6),
-                            rs.getInt(7),
-                            rs.getString(8),
-                            rs.getInt(9),
-                            rs.getString(10),
-                            rs.getInt(11)
+                            rs.getString(7),
+                            rs.getInt(8),
+                            rs.getString(9)
                     );
                 listProductInPage.add(p);
             }
@@ -268,12 +266,11 @@ public class ProductDAO {
     }
 
     public Product getProductByID(int productID) {
-        String query = "select p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, sum(pd.countProduct) as totalProduct\n"
+        String query = "select p.productID, p.productName, p.descriptions, p.imageLink, p.price, p.categoryID, c.categoryName\n"
                 + "from Products as p\n"
-                + "left outer join Product_Detail as pd on (p.productID = pd.productID)\n"
                 + "left outer join Category as c on (p.categoryID = c.categoryID)\n"
                 + "Where p.productID = ?\n"
-                + "group by p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName";
+                + "group by p.productID, p.productName, p.descriptions, p.imageLink, p.price, p.categoryID, c.categoryName";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -284,11 +281,9 @@ public class ProductDAO {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
-                        rs.getString(5),
+                        rs.getInt(5),
                         rs.getInt(6),
-                        rs.getInt(7),
-                        rs.getString(8),
-                        rs.getInt(9)
+                        rs.getString(7)
                        );
             }
         } catch (Exception e) {
@@ -296,37 +291,37 @@ public class ProductDAO {
         return null;
     }
 
-    public List<CardProduct> getProductSame(int productID) {
-        List<CardProduct> listTop = new ArrayList<>();
-        String query = "SELECT TOP 4 p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName\n" +
-"FROM Store_Detail as sd INNER JOIN Products as p ON sd.productID = p.productID\n" +
-"INNER JOIN Stores as s ON sd.storeID = s.storeID\n" +
-"INNER JOIN Category as c ON p.categoryID = c.categoryID\n" +
-"WHERE p.categoryID = (Select categoryID from Products where productID = ?)";
-             
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, productID);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                CardProduct p = new CardProduct(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getString(4),
-                            rs.getString(5),
-                            rs.getInt(6),
-                            rs.getInt(7),
-                            rs.getString(8),
-                            rs.getInt(9),
-                            rs.getString(10));
-                    listTop.add(p);
-            }
-        } catch (Exception e) {
-        }
-        return listTop;
-    }
+//    public List<CardProduct> getProductSame(int productID) {
+//        List<CardProduct> listTop = new ArrayList<>();
+//        String query = "SELECT TOP 4 p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName\n" +
+//"FROM Store_Detail as sd INNER JOIN Products as p ON sd.productID = p.productID\n" +
+//"INNER JOIN Stores as s ON sd.storeID = s.storeID\n" +
+//"INNER JOIN Category as c ON p.categoryID = c.categoryID\n" +
+//"WHERE p.categoryID = (Select categoryID from Products where productID = ?)";
+//             
+//        try {
+//            conn = new DBContext().getConnection();
+//            ps = conn.prepareStatement(query);
+//            ps.setInt(1, productID);
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                CardProduct p = new CardProduct(
+//                            rs.getInt(1),
+//                            rs.getString(2),
+//                            rs.getString(3),
+//                            rs.getString(4),
+//                            rs.getString(5),
+//                            rs.getInt(6),
+//                            rs.getInt(7),
+//                            rs.getString(8),
+//                            rs.getInt(9),
+//                            rs.getString(10));
+//                    listTop.add(p);
+//            }
+//        } catch (Exception e) {
+//        }
+//        return listTop;
+//    }
     public store1 showStore (String productID) {
          String query = "select s.* from Store s, Product p\n" +
                         "where p.StoreID = s.StoreID\n" +
@@ -388,15 +383,15 @@ public class ProductDAO {
         boolean result = false;
         try {
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement("INSERT INTO Products VALUES(?, ?, ?, ?, ?, ?, 0)");
+            ps = conn.prepareStatement("INSERT INTO Products(productName, descriptions, imageLink, price, categoryID) VALUES(?, ?, ?, ?, ?)");
             ps.setString(1, product.getProductName());
             ps.setString(2, product.getDescriptions());
-            ps.setString(3, product.getSex());
-            ps.setString(4, product.getImageLink());
-            ps.setInt(5, product.getPrice());
-            ps.setInt(6, product.getCategoryID());
+            ps.setString(3, product.getImageLink());
+            ps.setInt(4, product.getPrice());
+            ps.setInt(5, product.getCategoryID());
             result = ps.executeUpdate() > 0;
             if (result) {
+                
                 p = this.getNewProduct();
             }
         } catch (Exception ex) {
@@ -410,11 +405,11 @@ public class ProductDAO {
         if (categoryID == 0) {
             listProductInPage = pagingProduct(index);
         } else {
-            String query = "SELECT p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName, sd.amount\n" +
+            String query = "SELECT p.productID, p.productName, p.descriptions, p.imageLink, p.price, p.categoryID, c.categoryName, s.storeID, s.storeName\n" +
 "FROM Store_Detail as sd INNER JOIN Products as p ON sd.productID = p.productID\n" +
 "INNER JOIN Stores as s ON sd.storeID = s.storeID\n" +
 "INNER JOIN Category as c ON p.categoryID = c.categoryID\n" +
-"WHERE p.categoryID = ? AND p.accept = 1\n" +
+"WHERE p.categoryID = ? \n" +
 "ORDER BY productID\n" +
 "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY";
             try {
@@ -429,13 +424,12 @@ public class ProductDAO {
                             rs.getString(2),
                             rs.getString(3),
                             rs.getString(4),
-                            rs.getString(5),
+                            
+                            rs.getInt(5),
                             rs.getInt(6),
-                            rs.getInt(7),
-                            rs.getString(8),
-                            rs.getInt(9),
-                            rs.getString(10),
-                            rs.getInt(11)
+                            rs.getString(7),
+                            rs.getInt(8),
+                            rs.getString(9)
                     );
                     listProductInPage.add(p);
                 }
@@ -463,14 +457,13 @@ public class ProductDAO {
         boolean result = false;
         try {
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement("UPDATE Products SET productName = ?, descriptions = ?, sex = ?, imageLink = ?, price = ?, categoryID = ? WHERE productID = ?");
+            ps = conn.prepareStatement("UPDATE Products SET productName = ?, descriptions = ?, imageLink = ?, price = ?, categoryID = ? WHERE productID = ?");
             ps.setString(1, product.getProductName());
             ps.setString(2, product.getDescriptions());
-            ps.setString(3, product.getSex());
-            ps.setString(4, product.getImageLink());
-            ps.setInt(5, product.getPrice());
-            ps.setInt(6, product.getCategoryID());
-            ps.setInt(7, product.getProductID());
+            ps.setString(3, product.getImageLink());
+            ps.setInt(4, product.getPrice());
+            ps.setInt(5, product.getCategoryID());
+            ps.setInt(6, product.getProductID());
 
             result = ps.executeUpdate() > 0;
         } catch (Exception ex) {
@@ -500,4 +493,5 @@ public class ProductDAO {
          }
          return l;
      }
+    
 }

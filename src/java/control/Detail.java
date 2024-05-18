@@ -72,21 +72,21 @@ public class Detail extends HttpServlet {
         
         Product productDetail = productDAO.getProductByID(productID);
         User u = (User) request.getSession().getAttribute("user");
-        List<CardProduct> listProductSame = productDAO.getProductSame(productID);
-        List<Category> listCategory = categoryDAO.getAllCategory();
-
-        int countProduct = detailDAO.getCountProduct(Integer.parseInt(storeID), productID);
-        ReviewDAO reviewDAO = new ReviewDAO();
-        List<Review> listReview = reviewDAO.getReviewByProductID(productID);
-        request.setAttribute("listReview", listReview);
-        System.out.println(listReview.size());
-        request.setAttribute("listProductSameID", listProductSame);
-        request.setAttribute("listAllCategory", listCategory);
-        request.setAttribute("countProduct", countProduct);
-        request.setAttribute("detail", productDetail);
-        request.setAttribute("storeID", storeID);
-        request.setAttribute("canComment", ordersDAO.isInOrders(u.getId(), productID));
-        request.getRequestDispatcher("Detail.jsp").forward(request, response);
+        if (u!=null) {
+            //List<CardProduct> listProductSame = productDAO.getProductSame(productID);
+            List<Category> listCategory = categoryDAO.getAllCategory();
+            ReviewDAO reviewDAO = new ReviewDAO();
+            List<Review> listReview = reviewDAO.getReviewByProductID(productID);
+            request.setAttribute("listReview", listReview);
+            System.out.println(listReview.size());
+            //request.setAttribute("listProductSameID", listProductSame);
+            request.setAttribute("listAllCategory", listCategory);
+            request.setAttribute("detail", productDetail);
+            request.setAttribute("storeID", storeID);
+            request.setAttribute("canComment", ordersDAO.isInOrders(u.getId(), productID));
+            request.getRequestDispatcher("Detail.jsp").forward(request, response);
+        }
+        
     }
 
     /**

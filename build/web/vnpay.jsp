@@ -13,8 +13,8 @@
         <link rel="stylesheet" href="assets/css/bootstrap.min.css" type="text/css">
 
         <!-- Custom styles for this template -->
-        <link href="/vnpay_jsp/assets/jumbotron-narrow.css" rel="stylesheet">      
-        <script src="/vnpay_jsp/assets/jquery-1.11.3.min.js"></script>
+        <link href="css/jumbotron-narrow.css" rel="stylesheet">      
+        <script src="css/jquery-1.11.3.min.js"></script>
     </head>
 
     <body>

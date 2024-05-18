@@ -104,7 +104,7 @@ public class DetailDAO {
     }
  public List<Carts> showCart(int cus, int stt) {
         List<Carts> list = new ArrayList<>();
-        String query = "  select c.cartID, c.userID, cd.productID, cd.size, cd.color, cd.amount, c.status, p.productName, p.imageLink, p.price, p.price * cd.amount as total, cd.cartDetaiID, cd.storeID\n" +
+        String query = "  select c.cartID, c.userID, cd.productID, cd.amount, c.status, p.productName, p.imageLink, p.price, p.price * cd.amount as total, cd.cartDetaiID, cd.storeID\n" +
 "  from Cart_Detail as cd INNER JOIN Carts as c ON (cd.cartID = c.cartID) \n" +
 "  INNER JOIN Products as p ON (cd.productID = p.productID)\n" +
 "  WHERE userID = ?";
@@ -117,17 +117,16 @@ public class DetailDAO {
                 list.add(new Carts(
                         rs.getInt(1),
                         rs.getInt(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getInt(6),
-                        rs.getInt(7),
-                        rs.getString(8),
-                        rs.getString(9),
-                        rs.getDouble(10),
-                        rs.getDouble(11),
-                        rs.getInt(12),
-                        rs.getInt(13)
+                        rs.getInt(3),
+
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getDouble(8),
+                        rs.getDouble(9),
+                        rs.getInt(10),
+                        rs.getInt(11)
                 ));
             }
         } catch (Exception e) {
@@ -176,9 +175,13 @@ public class DetailDAO {
             while (rs.next()) {
                 c = new Carts(
                         rs.getInt(1),
+                        0, 0,
                         rs.getInt(2),
+                        0,
                         rs.getString(3),
-                        rs.getDouble(4)
+                        "" ,0,
+                        rs.getDouble(4),
+                        0 ,0
                 );
             }
         } catch (Exception e) {
@@ -225,7 +228,7 @@ public class DetailDAO {
         }
     }
  public void insertOrder(int userID, String address, String payWay, String phone, String receiver, int total) {
-        String query = "Insert into Orders values (?, GETDATE(), NULL, ?, ?, NULL, ?, ?, ?, ?)";
+        String query = "Insert into Orders(userID, foundedDate, deliveryDate, address, paymentWay, paymentStatus, phone, receiver, total, status) values (?, GETDATE(), NULL, ?, ?, NULL, ?, ?, ?, ?)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);

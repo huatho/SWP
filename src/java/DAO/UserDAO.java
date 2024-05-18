@@ -37,7 +37,6 @@ public class UserDAO {
     }
     
     public User login(String acc, String pass){
-        
         String query = "SELECT * FROM Users WHERE userName = ? AND pass = ? AND lock = 0";
         User u = null;
         try{
@@ -179,6 +178,20 @@ public class UserDAO {
             
         }
         return u;
+    }
+    
+    public void setUpRole(int userID, int upRole) {
+        String query = "UPDATE Users SET upRole = ? WHERE userID = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, upRole);
+            ps.setInt(2, userID);
+            ps.executeUpdate();
+        }
+        catch(Exception e) {
+            
+        }
     }
     
     

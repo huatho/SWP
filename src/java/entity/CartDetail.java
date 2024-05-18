@@ -12,47 +12,18 @@ public class CartDetail {
     private int cartDetailID;
     private int cartID;
     private int productID;
-    private String size;
-    private String color;
     private int amount;
     private int storeID;
 
-    public CartDetail(int cartID, int productID, String size, String color, int amount) {
-        this.cartID = cartID;
-        this.productID = productID;
-        this.size = size;
-        this.color = color;
-        this.amount = amount;
-    }
-    
-    public CartDetail(int cartID, int productID, String size, String color) {
-        this.cartID = cartID;
-        this.productID = productID;
-        this.size = size;
-        this.color = color;
-    }
-
-    public CartDetail(int cartDetailID, int cartID, int productID, String size, String color, int amount) {
+    public CartDetail(int cartDetailID, int cartID, int productID, int amount, int storeID) {
         this.cartDetailID = cartDetailID;
         this.cartID = cartID;
         this.productID = productID;
-        this.size = size;
-        this.color = color;
-        this.amount = amount;
-    }
-
-    public CartDetail(int cartDetailID, int cartID, int productID, String size, String color, int amount, int storeID) {
-        this.cartDetailID = cartDetailID;
-        this.cartID = cartID;
-        this.productID = productID;
-        this.size = size;
-        this.color = color;
         this.amount = amount;
         this.storeID = storeID;
     }
-    
-    
-    
+
+   
     
 
     public int getCartDetailID() {
@@ -71,13 +42,6 @@ public class CartDetail {
         return productID;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public String getColor() {
-        return color;
-    }
 
     public int getAmount() {
         return amount;
@@ -91,13 +55,6 @@ public class CartDetail {
         this.productID = productID;
     }
 
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
 
     public void setAmount(int amount) {
         this.amount = amount;

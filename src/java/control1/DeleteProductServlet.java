@@ -1,7 +1,9 @@
 package control1;
 
+import DAO.CategoryDAO;
 import DAO.ProductDAO;
 import DAO.StoreDAO;
+import entity.Category;
 import entity.Product;
 import entity.Store;
 import java.io.IOException;
@@ -34,7 +36,10 @@ public class DeleteProductServlet extends HttpServlet {
             boolean result = productDAO.deleteProduct(productID);
             if (result) {
                 List<Product> listProduct = storeDAO.getAllProduct(st.getStoreID());
-                session.setAttribute("LIST_PRODUCT", listProduct);
+                CategoryDAO cateDAO = new CategoryDAO();
+                List<Category> list = cateDAO.getAllCategory();
+                request.setAttribute("LIST_CATEGORY", list);
+                request.setAttribute("LIST_PRODUCT", listProduct);
                 url = SUCCESS;
             }
         } catch (NumberFormatException ex) {

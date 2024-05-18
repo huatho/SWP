@@ -44,9 +44,7 @@
                                         <ul>
                                             <li><a href="showOrder?sod=${sessionScope.user.id}">Đơn hàng</a></li>
                                             <!--<li><a href="#">Lịch sử</a></li>-->
-                                            <c:if test="${sessionScope.user.roles > 1}">    
-                                                <li><a href="profileCustomer?Accid=${sessionScope.user.id}">Cá Nhân</a></li>
-                                                </c:if>
+                                            <li><a href="profileCustomer?Accid=${sessionScope.user.id}">Cá Nhân</a></li>
                                         </ul>
                                     </div>
 
@@ -83,10 +81,9 @@
                                                                     <li><a href="./blog-details.html">Blog Details</a></li>
                                                                 </ul>
                                                             </li>-->
-                                <li><a href="view-store">Store</a></li>
-                                <c:if test="${sessionScope.user.roles == 2}">  
-                                    <li><a href="view-product">My Store</a></li>
-                                </c:if>
+                                <li><a href="view-product">Store</a></li>
+                 
+                                <li><a href="aboutUs.jsp">About Us</a></li>
                             </ul>
                         </nav>
                     </div>

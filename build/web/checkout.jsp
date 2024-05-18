@@ -29,6 +29,7 @@
         <link rel="stylesheet" href="assets/css/owl.carousel.min.css" type="text/css">
         <link rel="stylesheet" href="assets/css/slicknav.min.css" type="text/css">
         <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+       
     </head>
 
     <body>
@@ -46,7 +47,7 @@
                                     <i class="fa fa-bars"></i>
                                     <span>Danh mục</span>
                                 </div>
-                                <ul>
+<!--                                <ul>
                                     <li><a href="#">Nam</a></li>
                                     <li><a href="#">Nữ</a></li>
                                     <li><a href="#">Quần</a></li>
@@ -54,7 +55,7 @@
                                     <li><a href="#">Váy</a></li>
                                     <li><a href="#">Áo khoác</a></li>
                                     <li><a href="#">Giày dép</a></li>
-                                </ul>
+                                </ul>-->
                             </div>
                         </div>
                         <div class="col-lg-9">
@@ -93,7 +94,7 @@
                             <div class="breadcrumb__text">
                                 <h2>Checkout</h2>
                                 <div class="breadcrumb__option">
-                                    <a href="./index.html">Home</a>
+                                    <a href="index.jsp">Home</a>
 
                                     <span>Checkout</span>
                                 </div>
@@ -145,7 +146,7 @@
                                         </label>
                                     </div>-->
                                     <div class="checkout__input">
-                                        <p>Order notes<span>*</span></p>
+                                        <p>Order notes</p>
                                         <input type="text"
                                                placeholder="Notes about your order, e.g. special notes for delivery.">
                                     </div>
@@ -154,7 +155,7 @@
                                 <div class="col-lg-4 col-md-6">
                                     <div class="checkout__order">
                                         <h4>Đơn hàng của bạn</h4>
-                                        
+                                        ${c.amount}
                                         <div class="checkout__order__products">Sản phẩm</div>
                                     <c:set var="total" value="0"/>
                                         <c:forEach items="${listCheckout}" var="c">
@@ -175,7 +176,12 @@
                                         <div class="checkout__input__checkbox" >
                                             <label for="payment">
                                                 Thanh toán khi nhận hàng
-                                                <input type="checkbox" id="payment" name="pay" value="Ship Cod" checked>
+                                                <input type="checkbox" id="payment" name="pay" value="Ship Cod" >
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label for="payment2">
+                                                Thanh toán online
+                                                <input type="checkbox" id="payment2" name="onlinepay" value="Online Payment">
                                                 <span class="checkmark"></span>
                                             </label>
                                         </div>

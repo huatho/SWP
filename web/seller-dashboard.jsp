@@ -127,7 +127,7 @@
                             </div>
                             <div><select class="form-control search-slt" id="exampleFormControlSelect1" name="txtCategorySearch">
                                     <option value="">All</option>
-                                    <c:forEach var="category" items="${sessionScope.LIST_CATEGORY}">
+                                    <c:forEach var="category" items="${LIST_CATEGORY}">
                                         <option value="${category.categoryName}" <c:if test="${param.txtCategorySearch == category.categoryName}">selected</c:if>>${category.categoryName}</option>
                                     </c:forEach>
                                 </select>
@@ -136,11 +136,11 @@
                             </div>
                         </div>
                     </form>
-                    <c:set var="listProduct" value="${sessionScope.LIST_PRODUCT}"/>
+                    <c:set var="listProduct" value="${LIST_PRODUCT}"/>
 
                     <div style="background: #fff; padding-left: 10px; border-radius: 10px; height: 100%; box-shadow: 0px 2px 4px rgba(58, 87, 232, 0.3);">
                         <c:if test="${sessionScope.mystore != null}">
-                            <div class="col"><a href="create-update-product.jsp"><button class="btn btn-success">Thêm sản phẩm</button></a></div>
+                            <div class="col"><a href="create-product"><button class="btn btn-success">Thêm sản phẩm</button></a></div>
                         </c:if>
                         <c:if test="${sessionScope.mystore == null}">
                             <div class="col"><a href="newStore.jsp"><button class="btn btn-success">Tạo shop</button></a></div>
@@ -154,7 +154,6 @@
                                                 <th class="col-1" scope="col">STT</th>
                                                 <th class="col-2" scope="col">Hình ảnh</th>
                                                 <th class="col-3" scope="col">Tên sản phẩm</th>
-                                                <th class="col-1" scope="col">Số lượng còn lại</th>
                                                 <th class="col-1" scope="col">Giá</th>
                                                 <th class="col-2" scope="col">Loại sản phẩm</th>
                                                 <th class="col-2" scope="col"></th>
@@ -170,7 +169,6 @@
                                                          class="img-fluid img-thumbnail" alt="">
                                                 </td>
                                                 <td><span style="font-weight: bold;">${product.productName}</span></br>${product.descriptions}</td>
-                                                <td>${product.totalProduct}</td>
                                                 <td>${product.price}</td>
                                                 <td>${product.categoryName}</td>
                                                 <th>
@@ -179,16 +177,15 @@
                                                         <input type="hidden" name="txtProductName" value="${product.productName}"/>
                                                         <input type="hidden" name="txtDescription" value="${product.descriptions}"/>
                                                         <input type="hidden" name="txtImageLink" value="${product.imageLink}"/>
-                                                        <input type="hidden" name="txtAmount" value="${product.totalProduct}"/>
                                                         <input type="hidden" name="txtPrice" value="${product.price}"/>
                                                         <input type="hidden" name="txtCategoryID" value="${product.categoryID}"/>
-<!--                                                        <input type="hidden" name="txtCategoryName" value="{product.categoryName}"/>-->
+                                                        <input type="hidden" name="txtCategoryName" value="${product.categoryName}"/>
                                                         <button type="submit" class="btn btn-success"><i class="fa fa-pencil"></i></button> 
                                                     </form>
                                                     <form action="delete-product" method="post">
                                                         <input type="hidden" name="txtProductID" value="${product.productID}"/>
                                                         <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                                                    </form
+                                                    </form>
 
                                                 </th>
                                             </tr>
@@ -199,7 +196,7 @@
                             </div>
                         </c:if>
                         <c:if test="${listProduct == null}">
-                            <h1>Product Not Found</h1>
+                            <h1>Your Store Don't Have Any Product!</h1>
                         </c:if>
                     </div>
                 </div>

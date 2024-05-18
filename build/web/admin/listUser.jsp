@@ -94,15 +94,15 @@
                         <li>
                             <a href="${pageContext.request.contextPath}/listProduct">
                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                <p>Quản lý sản phẩm</p>
+                                <p>Duyệt người bán</p>
                             </a>
                         </li>
-<!--                        <li>
-                            <a href="editAdmin?Accid={sessionScope.account.id}">
+                        <li>
+                            <a href="/Mooc/TopSellingControl">
                                 <i class="fa fa-info" aria-hidden="true"></i>
-                                <p>Thông tin</p>
+                                <p>Doanh số</p>
                             </a>
-                        </li>-->
+                        </li>
                         <li>
                             <a href="logout">
                                 <i class="fa fa-sign-out" aria-hidden="true"></i>
@@ -316,7 +316,7 @@
                                                 <tr>
                                                     <td>${c.acc}</td>
                                                     <td>${c.email}</td>
-                                                    <c:if test="${c.roles == 3}">
+                                                    <c:if test="${c.roles == 1}">
                                                         <td>Khách hàng</td>
                                                     </c:if>
                                                     <c:if test="${c.roles == 2}">

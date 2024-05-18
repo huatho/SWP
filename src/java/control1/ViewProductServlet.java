@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import dtos.ProductDTO;
 import entity.Product;
 import entity.Store;
+import entity.User;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpSession;
 
@@ -25,39 +26,43 @@ public class ViewProductServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
-        try {
-            String nameSearch = request.getParameter("txtProductNameSearch");
-            String priceFrom = request.getParameter("txtPriceFrom");
-            String priceTo = request.getParameter("txtPriceTo");
-            String categoryName = request.getParameter("txtCategorySearch");
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        if (u!=null) {
+            if (u.getRoles()==2) {
+                String url = ERROR;
+                try {
+                    String nameSearch = request.getParameter("txtProductNameSearch");
+                    String priceFrom = request.getParameter("txtPriceFrom");
+                    String priceTo = request.getParameter("txtPriceTo");
+                    String categoryName = request.getParameter("txtCategorySearch");
 
-            HttpSession session = request.getSession();
-            CategoryDAO categoryDAO = new CategoryDAO();
-            List<CategoryDTO> listCategory = categoryDAO.getCategory();
-            session.setAttribute("LIST_CATEGORY", listCategory);
-            if(priceFrom == null) {
-                priceFrom = "";
+                    CategoryDAO categoryDAO = new CategoryDAO();
+                    List<CategoryDTO> listCategory = categoryDAO.getCategory();
+                    request.setAttribute("LIST_CATEGORY", listCategory);
+
+                    Store st = (Store) session.getAttribute("mystore");
+                    StoreDAO storeDAO = new StoreDAO();
+                    List<Product> listProduct = storeDAO.getAllProduct(st.getStoreID());
+                    request.setAttribute("LIST_PRODUCT", listProduct);
+                    url = SUCCESS;
+                } catch (Exception ex) {
+                    ex.getMessage();
+                } finally {
+                    request.getRequestDispatcher(url).forward(request, response);
+                }
             }
-            if(priceTo == null) {
-                priceTo = "";
+            else {
+                request.setAttribute("email", u.getEmail().getEmail());
+                request.setAttribute("username", u.getAcc());
+                request.getRequestDispatcher("createStore.jsp").forward(request, response);
             }
-            if(nameSearch == null) {
-                nameSearch = "";
-            }
-            if(categoryName == null) {
-                categoryName = "";
-            }
-            Store st = (Store) session.getAttribute("mystore");
-            StoreDAO storeDAO = new StoreDAO();
-            List<Product> listProduct = storeDAO.getAllProduct(st.getStoreID());
-            session.setAttribute("LIST_PRODUCT", listProduct);
-            url = SUCCESS;
-        } catch (Exception ex) {
-            ex.getMessage();
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
         }
+        else {
+            response.sendRedirect("login.jsp");
+        }
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

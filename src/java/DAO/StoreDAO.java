@@ -77,14 +77,13 @@ public class StoreDAO {
         return l;
     }
     
-    public void addProductToStore(int storeID, int productID, int amount){
-        String query = "INSERT INTO Store_Detail(storeID, productID, amount) VALUES (?, ?, ?)";
+    public void addProductToStore(int storeID, int productID){
+        String query = "INSERT INTO Store_Detail(storeID, productID) VALUES (?, ?)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setInt(1, storeID);
             ps.setInt(2, productID);
-            ps.setInt(3, amount);
 
     
             ps.executeUpdate();
@@ -93,9 +92,9 @@ public class StoreDAO {
     }
     
     public List<Product> getAllProduct(int storeID){
-        String query = "SELECT p.productID, p.productName, p.descriptions, p.sex, p.imageLink, p.price, p.categoryID, Store_Detail.amount FROM Store_Detail \n" +
+        String query = "SELECT p.productID, p.productName, p.descriptions, p.imageLink, p.price, p.categoryID FROM Store_Detail \n" +
 "  INNER JOIN Products as p ON Store_Detail.productID = p.productID \n" +
-"  WHERE storeID = ? AND accept = 1";
+"  WHERE storeID = ?";
         List<Product> l = new ArrayList<>();
         try {
             conn = new DBContext().getConnection();
@@ -104,8 +103,8 @@ public class StoreDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 CategoryDAO cateDAO = new CategoryDAO();
-                int cateID = rs.getInt(7);
-                l.add(new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), cateID, cateDAO.getCateNameByID(cateID), rs.getInt(8)));
+                int cateID = rs.getInt(6);
+                l.add(new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), cateID, cateDAO.getCateNameByID(cateID)));
             }
         } catch (Exception e) {
         }

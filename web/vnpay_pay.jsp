@@ -12,8 +12,8 @@
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="assets/css/bootstrap.min.css" type="text/css">
         <!-- Custom styles for this template -->
-        <link href="/vnpay_jsp/assets/jumbotron-narrow.css" rel="stylesheet">      
-        <script src="/vnpay_jsp/assets/jquery-1.11.3.min.js"></script>
+        <link href="css/jumbotron-narrow.css" rel="stylesheet">      
+        <script src="css/jquery-1.11.3.min.js"></script>
     </head>
 
     <body>
@@ -25,7 +25,7 @@
             </div>
             <h3>Tạo mới đơn hàng</h3>
             <div class="table-responsive">
-                <form action="vnpayajax" id="frmCreateOrder" method="post">        
+                <form action="/vnpayajax" id="frmCreateOrder" method="post">        
                     <div class="form-group">
                         <label for="amount">Số tiền</label>
                         <input class="form-control" data-val="true" data-val-number="The field Amount must be a number." data-val-required="The Amount field is required." id="amount" max="100000000" min="1" name="amount" type="number" value="10000" />
@@ -55,7 +55,7 @@
                          <label for="language">Tiếng anh</label><br>
                          
                     </div>
-                    <button type="submit" class="btn btn-default" href>Thanh toán</button>
+                    <button type="submit" class="btn btn-default">Thanh toán</button>
                 </form>
             </div>
             <p>

@@ -42,6 +42,41 @@ public class AddToCart extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User u = (User) request.getSession().getAttribute("user");
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        if(u == null) {
+            response.sendRedirect("loginController");
+        } else{
+            String productId = request.getParameter("productID");
+            String storeID = request.getParameter("storeID");
+            
+//            ProductDAO productDAO = new ProductDAO();
+//            store1 st = productDAO.showStore(productId);
+            CartDAO cartDAO = new CartDAO();
+//            Cart c = dao.showCart1(productId, 2, size, color, cid);
+            Cart cart = cartDAO.getCartByUserId(u.getId());
+                if(cart == null) {
+                    Cart newCart = cartDAO.createCart(u.getId(), "");
+                    cartDAO.addToCart(newCart.getCartID(), Integer.parseInt(productId), quantity, Integer.parseInt(storeID));
+                    response.sendRedirect("home");
+                }else {
+                    CartDetail cdetail = cartDAO.getDetail(cart.getCartID(), Integer.parseInt(productId), Integer.parseInt(storeID));
+                    if (cdetail == null) {
+                        cartDAO.addToCart(cart.getCartID(), Integer.parseInt(productId), quantity, Integer.parseInt(storeID));
+                    }
+                    else {
+                        int newAmount = cdetail.getAmount()+quantity;
+                        cartDAO.updateCart(cdetail.getCartDetailID(), newAmount);
+                    }
+//                    int quan = c.getAmount() + quantity;
+//                    dao.updateCart(quan, c.getCartID());
+                    response.sendRedirect("home"); 
+                }
+//                } else {
+//                    dao.insertCart(cid, st.getStoreId(), productId, size, color, quantity);
+//                    request.getRequestDispatcher("detail?productID=" + productId).forward(request, response);
+//                }
+        }
         
         
     }
@@ -58,8 +93,8 @@ public class AddToCart extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        processRequest(request, response);
+        //request.getRequestDispatcher("login.jsp").forward(request, response);
       
     }
 
@@ -74,42 +109,7 @@ public class AddToCart extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        User u = (User) request.getSession().getAttribute("user");
-        if(u == null) {
-            response.sendRedirect("loginController");
-        } else{
-            String productId = request.getParameter("productID");
-            String storeID = request.getParameter("storeID");
-            
-//            ProductDAO productDAO = new ProductDAO();
-//            store1 st = productDAO.showStore(productId);
-            String size = request.getParameter("txtsize");
-            String color = request.getParameter("txtcolor");
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-            CartDAO cartDAO = new CartDAO();
-//            Cart c = dao.showCart1(productId, 2, size, color, cid);
-            Cart cart = cartDAO.getCartByUserId(u.getId());
-                if(cart == null) {
-                    Cart newCart = cartDAO.createCart(u.getId(), "");
-                    cartDAO.addToCart(newCart.getCartID(), Integer.parseInt(productId), size, color, quantity, Integer.parseInt(storeID));
-                    response.sendRedirect("home");
-                }else {
-                    CartDetail cdetail = cartDAO.getDetail(cart.getCartID(), Integer.parseInt(productId), Integer.parseInt(storeID));
-                    if (cdetail == null) {
-                        cartDAO.addToCart(cart.getCartID(), Integer.parseInt(productId), size, color, quantity, Integer.parseInt(storeID));
-                    }
-                    else {
-                        int newAmount = cdetail.getAmount()+quantity;
-                        cartDAO.updateCart(cdetail.getCartDetailID(), newAmount);
-                    }
-//                    int quan = c.getAmount() + quantity;
-//                    dao.updateCart(quan, c.getCartID());
-                    response.sendRedirect("home"); }
-//                } else {
-//                    dao.insertCart(cid, st.getStoreId(), productId, size, color, quantity);
-//                    request.getRequestDispatcher("detail?productID=" + productId).forward(request, response);
-//                }
-        }
+        processRequest(request, response);
     }
 
     /**

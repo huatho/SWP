@@ -52,18 +52,16 @@ public class CartDAO {
         return getCartByUserId(userID);
     }
     
-    public void addToCart(int cID, int pID, String size, String color, int quantity, int storeID){       
-        String query = "INSERT INTO Cart_Detail(cartID, productID, size, color, amount, storeID) VALUES(?,?,?,?,?,?)";
+    public void addToCart(int cID, int pID, int quantity, int storeID){       
+        String query = "INSERT INTO Cart_Detail(cartID, productID, amount, storeID) VALUES(?,?,?,?)";
         Cart c = null;
         try{
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setInt(1, cID);
             ps.setInt(2, pID);
-            ps.setString(3, size);
-            ps.setString(4, color);
-            ps.setInt(5, quantity);
-            ps.setInt(6, storeID);
+            ps.setInt(3, quantity);
+            ps.setInt(4, storeID);
             ps.executeUpdate();
             
 
@@ -84,7 +82,7 @@ public class CartDAO {
             ps.setInt(3, storeID);
             rs = ps.executeQuery();
             while(rs.next()){
-                c = new CartDetail(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getInt(7));
+                c = new CartDetail(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
             }
 
         }catch(Exception e){
@@ -93,12 +91,13 @@ public class CartDAO {
         return c;
     }
     
-    public void updateCart(int cdetailID, int quantity){       
+    public void updateCart(int cdetailID, int amount){   
+        DetailDAO dao = new DetailDAO();
         String query = "UPDATE Cart_Detail SET amount = ? WHERE cartDetaiID = ?";
         try{
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setInt(1, quantity);
+            ps.setInt(1, amount);
             ps.setInt(2, cdetailID);
             ps.executeUpdate();
         }catch(Exception e){
@@ -115,7 +114,7 @@ public class CartDAO {
             ps.setInt(1, id);
             rs = ps.executeQuery();
             while(rs.next()){
-                c = new CartDetail(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getInt(7));
+                c = new CartDetail(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
             }
 
         }catch(Exception e){

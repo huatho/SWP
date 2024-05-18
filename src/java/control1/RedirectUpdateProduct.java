@@ -1,7 +1,9 @@
 package control1;
 
+import DAO.CategoryDAO;
 import dtos.CategoryDTO;
 import dtos.ProductDTO;
+import entity.Category;
 import entity.Product;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -9,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @WebServlet(name = "RedirectUpdateProduct", urlPatterns = {"/redirect-update-product"})
 public class RedirectUpdateProduct extends HttpServlet {
@@ -55,15 +58,16 @@ public class RedirectUpdateProduct extends HttpServlet {
             String productName = request.getParameter("txtProductName");
             String description = request.getParameter("txtDescription");
             String imageLink = request.getParameter("txtImageLink");
-            String amount = request.getParameter("txtAmount");
             int price = Integer.parseInt(request.getParameter("txtPrice"));
             String categoryID = request.getParameter("txtCategoryID");
-//            String categoryName = request.getParameter("txtCategoryName");
+            String categoryName = request.getParameter("txtCategoryName");
 //            int storeID = Integer.parseInt(request.getParameter("txtStoreID"));
 
-            Product product = new Product(productID, productName, description, "", imageLink, price, Integer.parseInt(categoryID), Integer.parseInt(amount));
-
+            Product product = new Product(productID, productName, description, imageLink, price, Integer.parseInt(categoryID), categoryName);
+            CategoryDAO dao = new CategoryDAO();
+            List<Category> list = dao.getAllCategory();
             request.setAttribute("PRODUCT", product);
+            request.setAttribute("LIST_CATEGORY", list);
             url = SUCCESS;
         } catch (NumberFormatException ex) {
             ex.getMessage();

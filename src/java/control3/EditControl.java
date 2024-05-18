@@ -81,15 +81,9 @@ public class EditControl extends HttpServlet {
         if ("2".equals(status)) {
             int pid = dao.getProductIDByOD(od);
             int amountOrder = Integer.parseInt(request.getParameter("amount"));
-            int amountStore = storeDAO.getAmount(store.getStoreID(), pid);
-            if (amountStore>=amountOrder) {
-                request.setAttribute("msg", "Cập nhật thành công!");
-                storeDAO.updateAmount(store.getStoreID(), pid, amountStore-amountOrder);
-                dao.editOrderStatus(status, od);
-            }
-            else {
-                request.setAttribute("msg","Không đủ số lượng sản phẩm để duyệt đơn!");
-            }
+            request.setAttribute("msg", "Cập nhật thành công!");
+            dao.editOrderStatus(status, od);
+           
         }
         if (status.equals("0")) {
             dao.editOrderStatus(status, od);

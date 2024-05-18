@@ -1,6 +1,6 @@
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.nio.charset.StandardCharsets"%>
-<%@page import="com.vnpay.common.Config"%>
+<%@page import="vnpay.Config"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -23,10 +23,10 @@
         <meta name="author" content="">
         <title>KẾT QUẢ THANH TOÁN</title>
         <!-- Bootstrap core CSS -->
-        <link href="/vnpay_jsp/assets/bootstrap.min.css" rel="stylesheet"/>
+        <link href="css/bootstrap.min.css" rel="stylesheet"/>
         <!-- Custom styles for this template -->
-        <link href="/vnpay_jsp/assets/jumbotron-narrow.css" rel="stylesheet"> 
-        <script src="/vnpay_jsp/assets/jquery-1.11.3.min.js"></script>
+        <link href="css/jumbotron-narrow.css" rel="stylesheet"> 
+        <script src="css/jquery-1.11.3.min.js"></script>
     </head>
     <body>
         <%
@@ -99,7 +99,10 @@
                                 out.print("invalid signature");
                             }
                         %></label>
-                </div> 
+                        </br>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='home';">Về trang chủ</button>
+
+                </div>
             </div>
             <p>
                 &nbsp;

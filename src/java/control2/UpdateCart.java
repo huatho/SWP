@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package control2;
 
-import DAO.DetailDAO;
-import entity.Cart;
-import entity.Carts;
-import entity.Color;
-import entity.Colors;
-import entity.Size;
+import DAO.CartDAO;
+import entity.CartDetail;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,71 +12,55 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author MSII
- */
-@WebServlet(name = "UpdateCart", urlPatterns = {"/updateCart"})
+@WebServlet(name = "UpdateCart", urlPatterns = {"/update-cart"})
 public class UpdateCart extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int csID = Integer.parseInt(request.getParameter("csID"));
-        int cid = Integer.parseInt(request.getParameter("cid"));
-        int amount = Integer.parseInt(request.getParameter("amount"));
-        String size = request.getParameter("size");
-        String color = request.getParameter("color");
-        DetailDAO dao = new DetailDAO();
-        dao.updateCarts(color, size, amount, cid);
-        response.sendRedirect("showCart?cid=" + csID);
+        // Process request here
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        request.getRequestDispatcher("UpdateCart.jsp").forward(request, response);
+        
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       processRequest(request, response);
+        // Process cart update request here
+        String detailID = request.getParameter("cbid");
+        String quantityStr = request.getParameter("amount");
+        
+        // Check if detailID and quantity are not null or empty
+        if (detailID != null && !detailID.isEmpty() && quantityStr != null && !quantityStr.isEmpty()) {
+            try {
+                int cdetailID = Integer.parseInt(detailID);
+                int amount = Integer.parseInt(quantityStr);
+                
+                // Update cart detail with new quantity
+                CartDAO cartDAO = new CartDAO();
+                cartDAO.updateCart(cdetailID, amount);
+                
+                // Redirect back to cart page or any other appropriate page
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            } catch (NumberFormatException e) {
+                // Handle parsing errors
+                e.printStackTrace();
+                // Redirect back to cart page with error message
+                response.sendRedirect("cart.jsp?error=Invalid quantity");
+            }
+        } else {
+            // Redirect back to cart page with error message
+            response.sendRedirect("cart.jsp?error=Missing detailID or quantity");
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

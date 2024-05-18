@@ -12,9 +12,7 @@ package entity;
 public class Carts {
     private  int cartID;
     private int userID;
-    private String productID;
-    private String size;
-    private String color;
+    private int productID;
     private int amount;
     private int stauts;
     private String productName;
@@ -27,56 +25,10 @@ public class Carts {
     public Carts() {
     }
 
-    public Carts(int cartID, int userID, String productID, String size, String color, int amount, int stauts, String productName, String imgLink, double price, double total) {
+    public Carts(int cartID, int userID, int productID, int amount, int stauts, String productName, String imgLink, double price, double total, int cartDetailID, int storeID) {
         this.cartID = cartID;
         this.userID = userID;
         this.productID = productID;
-        this.size = size;
-        this.color = color;
-        this.amount = amount;
-        this.stauts = stauts;
-        this.productName = productName;
-        this.imgLink = imgLink;
-        this.price = price;
-        this.total = total;
-    }
-
-    public Carts(int cartID, String productID, String size, String color, int amount) {
-        this.cartID = cartID;
-        this.productID = productID;
-        this.size = size;
-        this.color = color;
-        this.amount = amount;
-    }
-
-    public Carts(int cartID, int userID, String productID, String size, String color, int amount, int stauts, String productName, String imgLink, double price, double total, int cartDetailID) {
-        this.cartID = cartID;
-        this.userID = userID;
-        this.productID = productID;
-        this.size = size;
-        this.color = color;
-        this.amount = amount;
-        this.stauts = stauts;
-        this.productName = productName;
-        this.imgLink = imgLink;
-        this.price = price;
-        this.total = total;
-        this.cartDetailID = cartDetailID;
-    }
-
-    public Carts(int cartID, int amount, String productName, double total) {
-        this.cartID = cartID;
-        this.amount = amount;
-        this.productName = productName;
-        this.total = total;
-    }
-    
-    public Carts(int cartID, int userID, String productID, String size, String color, int amount, int stauts, String productName, String imgLink, double price, double total, int cartDetailID, int storeID) {
-        this.cartID = cartID;
-        this.userID = userID;
-        this.productID = productID;
-        this.size = size;
-        this.color = color;
         this.amount = amount;
         this.stauts = stauts;
         this.productName = productName;
@@ -86,6 +38,9 @@ public class Carts {
         this.cartDetailID = cartDetailID;
         this.storeID = storeID;
     }
+
+    
+    
 
     public int getStoreID() {
         return storeID;
@@ -114,29 +69,14 @@ public class Carts {
         this.userID = customerID;
     }
 
-    public String getProductID() {
+    public int getProductID() {
         return productID;
     }
 
-    public void setProductID(String productID) {
+    public void setProductID(int productID) {
         this.productID = productID;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
 
     public int getAmount() {
         return amount;
@@ -205,9 +145,6 @@ public class Carts {
         return priceDot;
     }
 
-    @Override
-    public String toString() {
-        return "Carts{" + "cartID=" + cartID + ", userID=" + userID  + ", productID=" + productID + ", size=" + size + ", color=" + color + ", amount=" + amount + ", stauts=" + stauts + ", productName=" + productName + ", imgLink=" + imgLink + ", price=" + price + ", total=" + total + '}';
-    }
+
     
 }
